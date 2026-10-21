@@ -727,7 +727,7 @@
         <div class="aero-titlebar">
           <div class="aero-titlebar-title">
             <img src="https://store-images.s-microsoft.com/image/apps.29733.14404921682717897.53dd5a92-0ce8-452a-b253-3473bb4ab90a.d7c77df2-9fdc-4466-8e73-b2a8cb813444?h=170" alt="Icon">
-            <span>Aviator Classic - Windows Aero Glass Flight Simulator v1.03</span>
+            <span>Aviator Classic - Flight Simulator v1.03</span>
           </div>
           <div class="aero-caption-buttons">
             <button class="aero-caption-btn" onclick="sound.beep(600, 0.05)" title="Minimize"><i class="fa-solid fa-minus"></i></button>
@@ -745,7 +745,7 @@
               <img src="https://store-images.s-microsoft.com/image/apps.29733.14404921682717897.53dd5a92-0ce8-452a-b253-3473bb4ab90a.d7c77df2-9fdc-4466-8e73-b2a8cb813444?h=170" alt="Logo" style="width: 24px; height: 24px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.25);">
               <div>
                 <div style="font-weight: 800; font-size: 13px; color: #b91c1c; letter-spacing: 0.3px;">AVIATOR CLASSIC</div>
-                <div style="font-size: 9px; color: #475569; font-weight: 600;">PROVABLY FAIR RNG • 97.0% RTP</div>
+                <div style="font-size: 9px; color: #475569; font-weight: 600;">PROVABLY FAIR RNG • 100% RTP</div>
               </div>
             </div>
 
@@ -832,7 +832,7 @@
 
                 <!-- Radar Screen Footnote -->
                 <div style="position: absolute; bottom: 4px; left: 8px; font-size: 9px; font-family: monospace; color: rgba(34, 197, 94, 0.45); pointer-events: none;">
-                  VISTA RADAR ENGINE 2008 • 108.4 MHz
+                  BY NOVUS SOLUTION 2026©
                 </div>
               </div>
 
@@ -842,7 +842,7 @@
                 <!-- Desk #1 -->
                 <div class="vista-desk-card">
                   <div class="desk-header">
-                    <span>Bet Station #1</span>
+                    <span>Bet #1</span>
                     <div style="display: flex; align-items: center; gap: 8px;">
                       <label style="display: inline-flex; align-items: center; gap: 3px; cursor: pointer;">
                         <input type="checkbox" id="autoBetCheck1" onchange="toggleAutoBet(1)">
@@ -886,7 +886,7 @@
                 <!-- Desk #2 -->
                 <div class="vista-desk-card">
                   <div class="desk-header">
-                    <span>Bet Station #2</span>
+                    <span>Bet #2</span>
                     <div style="display: flex; align-items: center; gap: 8px;">
                       <label style="display: inline-flex; align-items: center; gap: 3px; cursor: pointer;">
                         <input type="checkbox" id="autoBetCheck2" onchange="toggleAutoBet(2)">
@@ -1309,11 +1309,113 @@
     // Multiplayer Simulated Players Pool
     let simulatedPlayers = [];
     const playerPool = [
-      'Aarav_IN', 'Rajesh_99', 'Vikram_Pilot', 'Priya_K', 'Amit_Del', 'Karan_Trader',
-      'Rohan_M', 'Neha_Win', 'Deepak_Goa', 'Ananya_R', 'Suresh_B', 'Pooja_X',
-      'Kabir_95', 'CryptoRahul', 'Sunil_B', 'Aditi_V', 'Mohit_Gold', 'Preeti_Win'
-    ];
-
+'anas', 'rahul', 'aarav', 'raj', 'rohan', 'amit', 'karan', 'kabir',
+'sahil', 'aman', 'arjun', 'dev', 'yash', 'riya', 'priya', 'neha',
+'sana', 'zoya', 'ayaan', 'zain', 'sam', 'alex', 'john', 'mike',
+'james', 'liam', 'noah', 'leo', 'max', 'jack', 'emma', 'mia',
+'olivia', 'ava', 'sophia', 'lucas', 'ryan', 'adam', 'daniel', 'chris',
+'carlos', 'diego', 'luca', 'marco', 'omar', 'ali', 'amir', 'kenji',
+'kai', 'jun', 'wei', 'jin', 'yuki', 'kwame', 'malik', 'jordan'
+'anas', 'theanas', 'anas898', 'anas912', 'rahul007', 'aarav22',
+'raj_1999', 'vikram55', 'priya786', 'rohan123', 'neha009', 'amit45',
+'karan786', 'deepak77', 'pooja143', 'kabir95', 'aditi_21', 'mohit999',
+'riya2001', 'arjun88', 'sana786', 'ayaan07', 'zoya22', 'faizan786',
+'imran009', 'rehan123', 'aryan555', 'dev_007', 'isha143', 'meera21',
+'harsh999', 'yash_18', 'nikhil77', 'akshay123', 'vivek786', 'sneha22',
+'simran009', 'tanvi55', 'kavya143', 'muskan786', 'sahil007', 'aman999',
+'farhan21', 'sameer88', 'rajesh_99', 'ravi123', 'varun007', 'ananya22',
+'ishan555', 'parth786', 'omkar009', 'tushar123', 'kunal45', 'dhruv007',
+'shreya21', 'divya999', 'payal786', 'nisha143', 'alisha22', 'ayesha007',
+'zain123', 'noor786', 'armaan55', 'sam_1998', 'john007', 'mike1999',
+'alex22', 'chris_88', 'david123', 'james007', 'daniel555', 'oliver21',
+'liam999', 'noah786', 'ethan45', 'lucas007', 'jack_2000', 'ryan123',
+'adam88', 'ben009', 'leo555', 'max_21', 'harry007', 'tom1998',
+'emma22', 'olivia99', 'sophia123', 'mia007', 'ava555', 'lily21',
+'chloe786', 'ella009', 'grace88', 'lucy123', 'hannah007', 'zoe1999',
+'amelia21', 'isabella555', 'nina22', 'eva_88', 'anna123', 'sarah007',
+'jessica99', 'laura555', 'nicole21', 'kate786', 'alice009', 'ruby123',
+'jackson007', 'mason22', 'logan999', 'aiden123', 'wyatt55', 'caleb007',
+'hunter21', 'dylan786', 'carter009', 'luke555', 'isaac88', 'owen123',
+'elijah007', 'grayson99', 'sebastian21', 'julian786', 'gabriel009',
+'nathan123', 'aaron007', 'tyler55', 'jason999', 'kevin21', 'brandon88',
+'justin123', 'eric007', 'andrew555', 'peter21', 'mark786', 'paul009',
+'carlos22', 'diego007', 'mateo123', 'lucas_99', 'santiago55', 'rafael21',
+'pedro786', 'miguel009', 'alejandro123', 'andres007', 'javier555',
+'fernando88', 'marco21', 'enzo999', 'thiago123', 'bruno007',
+'sofia22', 'lucia99', 'camila123', 'valentina007', 'isabel555',
+'martina21', 'paula786', 'elena009', 'carla123', 'andrea007',
+'diego_99', 'juan555', 'pablo21', 'tomas786', 'nico009',
+'luca123', 'matteo007', 'lorenzo55', 'giovanni999', 'alessio21',
+'francesco88', 'antonio123', 'giulia007', 'chiara555', 'bianca21',
+'marco786', 'sandro009', 'pierre22', 'lucien99', 'hugo123',
+'antoine007', 'louis555', 'julien21', 'gabriel786', 'remy009',
+'amelie123', 'claire007', 'juliette55', 'celine999', 'lea21',
+'thomas88', 'felix123', 'maxim007', 'leon555', 'lukas21',
+'finn786', 'emil009', 'oskar123', 'greta007', 'lena55',
+'mia999', 'klara21', 'nils88', 'erik123', 'sven007',
+'ivan555', 'alexei21', 'dmitri786', 'nikita009', 'milan123',
+'andrei007', 'sergei55', 'viktor999', 'pavel21', 'kirill88',
+'anastasia123', 'alina007', 'irina555', 'natalia21', 'katya786',
+'omar009', 'ali123', 'hassan007', 'ahmed55', 'youssef999',
+'amir21', 'khalid88', 'tariq123', 'zayd007', 'hamza555',
+'layla21', 'mariam786', 'fatima009', 'amina123', 'yasmin007',
+'salma55', 'noor999', 'sara21', 'hana88', 'kenji123',
+'haruto007', 'yuki555', 'akira21', 'ren786', 'takumi009',
+'sora123', 'hiro007', 'ryo55', 'mei999', 'hana21',
+'sakura88', 'yuna123', 'rin007', 'ayumi555', 'naoki21',
+'wei786', 'jun009', 'chen123', 'ming007', 'kai55',
+'li999', 'xiao21', 'jin88', 'hao123', 'tao007',
+'yuna555', 'minji21', 'jiho786', 'seojun009', 'hyun123',
+'taeyang007', 'jimin55', 'soojin999', 'jiyeon21', 'yujin88',
+'kwame123', 'kofi007', 'amara555', 'zuri21', 'ayo786',
+'chidi009', 'emeka123', 'tunde007', 'bayo55', 'nia999',
+'thabo21', 'sipho88', 'tendai123', 'kamau007', 'imani555',
+'rafael21', 'andre786', 'marcus009', 'tyrone123', 'darius007',
+'jayden55', 'malik999', 'zion21', 'trevor88', 'devon123',
+'keith007', 'sean555', 'colin21', 'scott786', 'wayne009',
+'jake123', 'josh007', 'nick55', 'tony999', 'brian21',
+'steve88', 'dan123', 'rob007', 'benji555', 'bobby21',
+'ashley786', 'taylor009', 'jordan123', 'morgan007', 'casey55',
+'jamie999', 'riley21', 'skyler88', 'parker123', 'quinn007',
+'blake555', 'drew21', 'reese786', 'peyton009', 'rowan123',
+'charlie007', 'frank55', 'arthur999', 'theo21', 'alfie88',
+'archie123', 'freddie007', 'george555', 'henry21', 'edward786',
+'will009', 'samuel123', 'alfred007', 'stan55', 'harvey999',
+'bella21', 'millie88', 'poppy123', 'freya007', 'florence555',
+'matilda21', 'georgia786', 'maisie009', 'elsie123', 'ivy007',
+'holly55', 'amber999', 'summer21', 'faith88', 'hope123',
+'brooke007', 'paige555', 'ellie21', 'daisy786', 'molly009',
+'natalie123', 'mandy007', 'julia55', 'lisa999', 'monica21',
+'rachel88', 'rebecca123', 'melissa007', 'amanda555', 'lauren21',
+'vanessa786', 'erica009', 'danielle123', 'kim007', 'stacy55',
+'brad999', 'chad21', 'trent88', 'bryce123', 'corey007',
+'shawn555', 'zack21', 'cole786', 'connor009', 'evan123',
+'ian007', 'blake55', 'aidan999', 'jude21', 'elliot88',
+'milo123', 'asher007', 'silas555', 'theo21', 'ezra786',
+'isaiah009', 'micah123', 'roman007', 'jax55', 'brody999',
+'cryptoking21', 'trader_007', 'gamer999', 'coolguy123', 'girl_786',
+'user2026', 'realone99', 'king_007', 'queen123', 'lucky555',
+'winner21', 'proplayer88', 'shadow009', 'darkwolf123', 'fireboy007',
+'moonlight55', 'starboy999', 'nightowl21', 'ghost786', 'ninja009',
+'dragon123', 'tiger007', 'lion55', 'eagle999', 'hawk21',
+'wolf88', 'panther123', 'cobra007', 'falcon555', 'storm21',
+'blaze786', 'frost009', 'iceking123', 'thunder007', 'flash55',
+'speed999', 'racer21', 'pilot88', 'captain123', 'boss007',
+'legend555', 'champ21', 'ace786', 'hero009', 'master123',
+'alpha007', 'omega55', 'sigma999', 'delta21', 'nexus88',
+'pixel123', 'cyber007', 'tech55', 'hacker999', 'binary21',
+'matrix786', 'neo009', 'zero123', 'maxpower007', 'ultra55',
+'turbo999', 'rocket21', 'orbit88', 'comet123', 'cosmo007',
+'astro555', 'galaxy21', 'mars786', 'jupiter009', 'saturn123',
+'venus007', 'pluto55', 'solar999', 'lunar21', 'nova88',
+'ace_1998', 'user_786', 'cool_2001', 'hello123', 'itsme007',
+'iamhere55', 'justme999', 'random21', 'unknown88', 'nobody123',
+'someone007', 'online555', 'offline21', 'active786', 'silent009',
+'hidden123', 'private007', 'simple55', 'normal999', 'happy21',
+'smile88', 'chill123', 'relax007', 'vibes555', 'mood21',
+'dreamer786', 'thinker009', 'wanderer123', 'traveler007', 'explorer55',
+'nomad999', 'worldwide21', 'global88', 'international123', 'forever007'
+];
     /* Dynamic User Counter: Realistic Fluctuations between 44 and 100,000,000 */
     function updateOnlineCounter() {
       const delta = Math.floor((Math.random() - 0.49) * 650);
