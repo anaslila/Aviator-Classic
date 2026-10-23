@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Aviator Classic v1.5.5</title>
+  <title>Aviator Classic v1.6</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Aviator Classic">
@@ -167,6 +167,15 @@
       background-color: #f59e0b;
       border-color: #fbbf24;
     }
+
+    /* Live Cashout Flash Highlight */
+    .cashout-flash {
+      animation: flash-green 0.7s ease-out;
+    }
+    @keyframes flash-green {
+      0% { background-color: rgba(16, 185, 129, 0.25); }
+      100% { background-color: transparent; }
+    }
   </style>
 </head>
 <body class="bg-[#0b0d13] text-gray-100 flex flex-col min-h-screen relative">
@@ -188,11 +197,11 @@
       <div class="min-w-0 flex flex-col justify-center">
         <div class="flex items-center gap-1.5 flex-wrap">
           <span class="font-black tracking-wider text-white text-sm sm:text-lg italic truncate">AVIATOR <span class="text-red-500 font-extrabold text-xs sm:text-base">CLASSIC</span></span>
-          <span class="text-[9px] sm:text-[10px] bg-red-600/30 text-red-400 font-semibold px-1 py-0.2 rounded border border-red-500/30 flex-shrink-0">v1.5.5</span>
+          <span class="text-[9px] sm:text-[10px] bg-red-600/30 text-red-400 font-semibold px-1 py-0.2 rounded border border-red-500/30 flex-shrink-0">v1.6</span>
         </div>
         <div class="flex items-center gap-1.5 text-[9px] sm:text-xs text-gray-400 truncate">
           <span class="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
-          <span class="truncate">Online: <strong id="onlineUsersCount" class="text-emerald-400 font-mono-num font-bold">128,492</strong></span>
+          <span class="truncate">Online: <strong id="onlineUsersCount" class="text-emerald-400 font-mono-num font-bold">485,210</strong></span>
         </div>
       </div>
     </div>
@@ -231,7 +240,7 @@
   <!-- ==================== MAIN GAMEPLAY AREA ==================== -->
   <main class="flex-1 flex flex-col lg:flex-row p-2 sm:p-4 gap-3 max-w-[1700px] w-full mx-auto">
     
-    <!-- LEFT: LIVE BETS FEED -->
+    <!-- LEFT: REALTIME INTERACTIVE LIVE BETS FEED -->
     <section class="lg:w-72 bg-[#12141c] border border-[#202434] rounded-2xl flex flex-col overflow-hidden max-h-48 lg:max-h-none order-3 lg:order-1 shadow-lg">
       <div class="px-3 py-2 bg-[#171924] border-b border-[#222638] flex items-center justify-between">
         <div class="flex items-center gap-2">
@@ -302,7 +311,7 @@
               </label>
             </div>
 
-            <!-- Auto Out Toggle with Target Box Just Beside it (No Jiggling) -->
+            <!-- Auto Out Toggle with Target Box Just Beside it -->
             <div class="flex items-center gap-1.5 flex-shrink-0">
               <span class="text-gray-400 text-[10px] font-semibold">Auto Out</span>
               <label class="switch-ui">
@@ -310,7 +319,6 @@
                 <span class="switch-ui-slider"></span>
               </label>
               
-              <!-- Clean Target Input Box Directly Beside Toggle (Invisible reserves position cleanly) -->
               <div id="autoCashoutBox1" class="invisible flex items-center bg-[#191b26] border border-amber-500/50 rounded-lg px-1.5 py-0.5 ml-1 transition-all">
                 <input type="number" id="autoCashoutMult1" value="2.00" step="0.10" min="1.01" class="w-11 bg-transparent text-right font-bold text-xs text-amber-400 focus:outline-none font-mono-num">
                 <span class="text-amber-400 font-bold text-xs ml-0.5">x</span>
@@ -348,7 +356,7 @@
               </div>
             </div>
 
-            <!-- Compact Streamlined Action Button -->
+            <!-- Compact Action Button -->
             <div class="col-span-5 h-full">
               <button id="actionBtn1" onclick="handleActionBtn(1)" class="w-full h-full min-h-[70px] sm:min-h-[74px] rounded-xl flex flex-col items-center justify-center p-1.5 text-white font-extrabold transition-all duration-150 active:scale-95 btn-bet-ready shadow-md">
                 <span id="btnLabel1" class="text-base sm:text-lg uppercase tracking-wider">BET</span>
@@ -378,7 +386,7 @@
               </label>
             </div>
 
-            <!-- Auto Out Toggle with Target Box Just Beside it (No Jiggling) -->
+            <!-- Auto Out Toggle with Target Box Just Beside it -->
             <div class="flex items-center gap-1.5 flex-shrink-0">
               <span class="text-gray-400 text-[10px] font-semibold">Auto Out</span>
               <label class="switch-ui">
@@ -386,7 +394,6 @@
                 <span class="switch-ui-slider"></span>
               </label>
               
-              <!-- Clean Target Input Box Directly Beside Toggle -->
               <div id="autoCashoutBox2" class="invisible flex items-center bg-[#191b26] border border-amber-500/50 rounded-lg px-1.5 py-0.5 ml-1 transition-all">
                 <input type="number" id="autoCashoutMult2" value="1.50" step="0.10" min="1.01" class="w-11 bg-transparent text-right font-bold text-xs text-amber-400 focus:outline-none font-mono-num">
                 <span class="text-amber-400 font-bold text-xs ml-0.5">x</span>
@@ -424,7 +431,7 @@
               </div>
             </div>
 
-            <!-- Compact Streamlined Action Button -->
+            <!-- Compact Action Button -->
             <div class="col-span-5 h-full">
               <button id="actionBtn2" onclick="handleActionBtn(2)" class="w-full h-full min-h-[70px] sm:min-h-[74px] rounded-xl flex flex-col items-center justify-center p-1.5 text-white font-extrabold transition-all duration-150 active:scale-95 btn-bet-ready shadow-md">
                 <span id="btnLabel2" class="text-base sm:text-lg uppercase tracking-wider">BET</span>
@@ -679,7 +686,7 @@
     ============================================================== */
     const PLANE_SPRITE_URL = 'https://i.postimg.cc/kg5zXw0y/image.png';
     const UPI_VPA = 'lilaanas6-3@okicici';
-    const STORAGE_KEY_WALLET = 'aviator_classic_wallet_v155';
+    const STORAGE_KEY_WALLET = 'aviator_classic_wallet_v160';
 
     function safeNum(val, fallback = 1.00) {
       const n = parseFloat(val);
@@ -934,7 +941,8 @@
         }
       });
 
-      refreshLiveBetsFeed();
+      // Prepare fresh round of live simulated bets
+      initRoundSimulatedBets();
     }
 
     function startFlight() {
@@ -973,6 +981,9 @@
         }
         updateStationUI(id);
       });
+
+      // Mark uncashed simulated bets as lost/crashed
+      resolveSimulatedLosses();
 
       addHistoryPill(crashMultiplier);
 
@@ -1283,6 +1294,7 @@
 
         updateEnginePitch(currentMultiplier);
         checkAutoCashouts();
+        updateSimulatedBetsInFlight(currentMultiplier);
 
         if (currentMultiplier >= crashMultiplier) {
           crashFlight();
@@ -1613,38 +1625,186 @@
     }
 
     /* ==============================================================
-       8. SIMULATED LIVE MULTIPLAYER BETS FEED & COUNTER
+       8. AUTHENTIC LIVE MULTIPLAYER ENGINE & REALTIME INTERACTION
     ============================================================== */
-    const mockNames = ['Rahul_99', 'Amit_V', 'Preeti_K', 'Sanjay_41', 'Vikram_S', 'Pooja_R', 'Deepak_X', 'Rohan_B', 'Ananya_88', 'Kunal_9', 'Neha_S', 'Zaid_K', 'Divya_P'];
+    // 96% Real Indian & Global Authentic Handles
+    const realNamesList = [
+      'Rahul_Verma', 'Aarav_Sharma', 'Pooja_Patel', 'Amit_Kumar', 'Rohan_Mehta',
+      'Neha_Singh', 'Vikram_Rathore', 'Deepak_Gupta', 'Ananya_Iyer', 'Sanjay_Yadav',
+      'Kunal_Joshi', 'Sneha_Reddy', 'Manish_Malhotra', 'Priya_Nair', 'Aditya_Chopra',
+      'Divya_Menon', 'Arjun_Bansal', 'Kavita_Pandey', 'Harsh_Vardhan', 'Meera_Sen',
+      'Sahil_Khan', 'Tanvi_Kulkarni', 'Gaurav_Deshmukh', 'Alok_Tiwari', 'Simran_Kaur',
+      'Zaid_Shaikh', 'Ritu_Bhasin', 'Naveen_Chawla', 'Shreya_Ghoshal9', 'Vivek_Oberoi',
+      'Karthik_Subbaraj', 'Varun_Dhawan', 'Anjali_Saxena', 'Abhishek_Rawat', 'Suresh_Pillai',
+      'Isha_Ambani', 'Mohit_Suri', 'Payal_Rohatgi', 'Chetan_Bhagat', 'Bhavna_Panday',
+      'Rajesh_Koothrappali', 'Sunil_Shetty', 'Farhan_Akhtar', 'Pankaj_Tripathi', 'Monika_Rawal',
+      'Dev_Patel', 'Prateek_Kuhad', 'Richa_Chadha', 'Ayushmann_K', 'Radhika_Apte'
+    ];
 
-    function refreshLiveBetsFeed() {
+    // 4% Gimmick / Fun Handles
+    const gimmickNamesList = [
+      'Kalyug_Ka_God', 'Mr_Lootera', 'Rockets_Pilot', 'Noob_Master_69',
+      'Chai_Garam', 'Paisa_Double', 'Bhai_Ka_Lover', 'Loss_King_99'
+    ];
+
+    function getRandomUsername() {
+      const isGimmick = Math.random() < 0.04;
+      if (isGimmick) {
+        return gimmickNamesList[Math.floor(Math.random() * gimmickNamesList.length)];
+      }
+      const base = realNamesList[Math.floor(Math.random() * realNamesList.length)];
+      const suffix = Math.floor(Math.random() * 900 + 10);
+      return `${base}_${suffix}`;
+    }
+
+    let activeLiveBets = [];
+
+    // Pre-calculate randomized realistic stakes
+    function getRandomStake() {
+      const r = Math.random();
+      if (r < 0.40) return [20, 50, 100][Math.floor(Math.random() * 3)];
+      if (r < 0.75) return [150, 200, 300, 500][Math.floor(Math.random() * 4)];
+      if (r < 0.93) return [800, 1000, 1500, 2000][Math.floor(Math.random() * 4)];
+      return [3000, 5000, 10000][Math.floor(Math.random() * 3)];
+    }
+
+    function initRoundSimulatedBets() {
+      activeLiveBets = [];
+      const totalCount = Math.floor(Math.random() * 15) + 18; // 18 to 32 visible active players
+
+      for (let i = 0; i < totalCount; i++) {
+        // Cashout plan: 60% chance user aims for low/mid multiplier (1.10x to 4.50x), 40% will crash/lose
+        const willAttemptCashout = Math.random() < 0.65;
+        const targetMultiplier = willAttemptCashout 
+          ? Math.floor((Math.random() * 3.5 + 1.15) * 100) / 100 
+          : 999.0; // High unreachable target means they will lose when crash happens
+
+        activeLiveBets.push({
+          id: `sim_bet_${i}_${Date.now()}`,
+          user: getRandomUsername(),
+          stake: getRandomStake(),
+          targetMultiplier: targetMultiplier,
+          cashedOut: false,
+          cashedOutAt: 0,
+          status: 'IN_PLAY' // 'IN_PLAY', 'CASHED', 'LOST'
+        });
+      }
+
+      renderLiveBetsDom();
+    }
+
+    function renderLiveBetsDom() {
       const feed = document.getElementById('liveBetsList');
       feed.innerHTML = '';
-      const totalBets = Math.floor(Math.random() * 400) + 350;
-      document.getElementById('feedBetsTotal').innerText = `${totalBets} Bets`;
+      document.getElementById('feedBetsTotal').innerText = `${activeLiveBets.length} Bets`;
 
-      const onlineRandom = Math.floor(Math.random() * 850000) + 124500;
-      document.getElementById('onlineUsersCount').innerText = onlineRandom.toLocaleString('en-IN');
-
-      for (let i = 0; i < 20; i++) {
-        const user = mockNames[Math.floor(Math.random() * mockNames.length)] + '_' + Math.floor(Math.random() * 90 + 10);
-        const bet = [20, 50, 100, 200, 500, 1000][Math.floor(Math.random() * 6)];
-        const cashed = Math.random() > 0.45;
-        const mult = (Math.random() * 3.5 + 1.1).toFixed(2);
-
+      activeLiveBets.forEach(bet => {
         const row = document.createElement('div');
+        row.id = bet.id;
         row.className = "grid grid-cols-12 px-2 py-1.5 items-center hover:bg-[#1a1c28] transition rounded";
+
+        let statusHtml = `<span class="text-gray-500 font-mono">-</span>`;
+        if (bet.status === 'CASHED') {
+          statusHtml = `<span class="text-amber-400 font-bold font-mono">${bet.cashedOutAt.toFixed(2)}x</span>`;
+        } else if (bet.status === 'LOST') {
+          statusHtml = `<span class="text-red-500 font-bold font-mono text-[10px]">Crashed</span>`;
+        }
+
         row.innerHTML = `
-          <span class="col-span-6 text-gray-300 truncate font-sans text-[11px]">${user}</span>
-          <span class="col-span-3 text-right text-gray-400">₹${bet}</span>
-          <span class="col-span-3 text-right font-bold ${cashed ? 'text-amber-400' : 'text-red-500'}">${cashed ? mult + 'x' : '-'}</span>
+          <span class="col-span-6 text-gray-300 truncate font-sans text-[11px] font-medium">${bet.user}</span>
+          <span class="col-span-3 text-right text-gray-400 font-mono">₹${bet.stake}</span>
+          <span class="col-span-3 text-right font-mono" id="${bet.id}_status">${statusHtml}</span>
         `;
         feed.appendChild(row);
-      }
+      });
+    }
+
+    // Real-time interactive ticker during flight: People cash out dynamically as multiplier climbs!
+    function updateSimulatedBetsInFlight(currentMult) {
+      activeLiveBets.forEach(bet => {
+        if (bet.status === 'IN_PLAY' && currentMult >= bet.targetMultiplier) {
+          bet.status = 'CASHED';
+          bet.cashedOut = true;
+          bet.cashedOutAt = bet.targetMultiplier;
+
+          const row = document.getElementById(bet.id);
+          const statusElem = document.getElementById(`${bet.id}_status`);
+          if (statusElem) {
+            statusElem.innerHTML = `<span class="text-amber-400 font-bold font-mono">${bet.cashedOutAt.toFixed(2)}x</span>`;
+          }
+          if (row) {
+            row.classList.add('cashout-flash');
+          }
+        }
+      });
+    }
+
+    // When airplane crashes, anyone who hasn't cashed out is marked as Lost/Crashed
+    function resolveSimulatedLosses() {
+      activeLiveBets.forEach(bet => {
+        if (bet.status === 'IN_PLAY') {
+          bet.status = 'LOST';
+          const statusElem = document.getElementById(`${bet.id}_status`);
+          if (statusElem) {
+            statusElem.innerHTML = `<span class="text-red-500 font-bold font-mono text-[10px]">Crashed</span>`;
+          }
+        }
+      });
     }
 
     /* ==============================================================
-       9. GESTURE & PINCH ZOOM PREVENTION (PRESERVES INSTANT TAPPING)
+       9. REALTIME CLOCK-BASED ONLINE USERS COUNTER (1 to 10,00,000)
+    ============================================================== */
+    // Returns a base online player volume tuned to the time of day (1 to 10,00,000)
+    function getTimeBasedBaseUsers() {
+      const now = new Date();
+      const hour = now.getHours(); // 0 to 23
+
+      // Peak gaming hours in India: 7:00 PM to 12:00 AM (400k - 850k)
+      // Afternoon: 12:00 PM to 6:00 PM (250k - 500k)
+      // Morning: 7:00 AM to 11:00 AM (80k - 250k)
+      // Late Night: 2:00 AM to 6:00 AM (15k - 80k)
+      let base = 250000;
+      if (hour >= 19 && hour <= 23) {
+        base = 650000;
+      } else if (hour >= 12 && hour < 19) {
+        base = 420000;
+      } else if (hour >= 7 && hour < 12) {
+        base = 160000;
+      } else {
+        base = 35000;
+      }
+      return base;
+    }
+
+    let currentOnlineUsers = getTimeBasedBaseUsers();
+
+    // Natural 2% to 5% smooth jitter every second, strictly clamped between 1 and 10,00,000
+    function updateOnlineUsersTicker() {
+      const percentJitter = (Math.random() * 0.03 + 0.02); // 0.02 (2%) to 0.05 (5%)
+      const isUp = Math.random() > 0.48; // balanced up/down oscillation
+      const delta = Math.floor(currentOnlineUsers * percentJitter);
+
+      if (isUp) {
+        currentOnlineUsers += delta;
+      } else {
+        currentOnlineUsers -= delta;
+      }
+
+      // Hard clamp bounds: between 1 and 10,00,000
+      currentOnlineUsers = Math.max(1, Math.min(1000000, currentOnlineUsers));
+
+      const elem = document.getElementById('onlineUsersCount');
+      if (elem) {
+        elem.innerText = currentOnlineUsers.toLocaleString('en-IN');
+      }
+    }
+
+    // Tick online users every 1 second
+    setInterval(updateOnlineUsersTicker, 1000);
+
+    /* ==============================================================
+       10. GESTURE & PINCH ZOOM PREVENTION
     ============================================================== */
     document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
     document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
@@ -1657,10 +1817,11 @@
     }, { passive: false });
 
     /* ==============================================================
-       10. INSTANT BOOTSTRAP
+       11. INSTANT BOOTSTRAP
     ============================================================== */
     resizeCanvas();
     updateWalletUI();
+    updateOnlineUsersTicker();
     startCountdown();
     requestAnimationFrame(renderGameLoop);
 
