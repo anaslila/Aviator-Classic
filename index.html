@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Aviator Classic v1.5.3</title>
+  <title>Aviator Classic v1.5.4</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Aviator Classic">
@@ -20,10 +20,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
   <style>
-    /* STRICT GLOBAL ZOOM & TAP PREVENTION FOR MOBILE */
+    /* PREVENT ZOOM BUT ALLOW INSTANT HIGH-FREQUENCY TAPS WITHOUT DELAY */
     html, body {
-      touch-action: pan-x pan-y;
-      -ms-touch-action: pan-x pan-y;
+      touch-action: manipulation;
       user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
@@ -51,7 +50,7 @@
     ::-webkit-scrollbar-track { background: #121318; }
     ::-webkit-scrollbar-thumb { background: #2a2e39; border-radius: 4px; }
 
-    /* Button State Classes */
+    /* Button State Classes (Optimized Compact Height) */
     .btn-bet-ready {
       background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
       border: 1px solid #34d399;
@@ -122,6 +121,53 @@
     .badge-sub2 { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.35); }
     .badge-mid { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.35); }
     .badge-super { background: rgba(234, 179, 8, 0.25); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.5); font-weight: 700; }
+
+    /* Custom iOS-Style Modern Toggle Switch */
+    .switch-ui {
+      position: relative;
+      display: inline-block;
+      width: 34px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+    .switch-ui input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .switch-ui-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #262a39;
+      border: 1px solid #373e54;
+      transition: .25s;
+      border-radius: 20px;
+    }
+    .switch-ui-slider:before {
+      position: absolute;
+      content: "";
+      height: 12px;
+      width: 12px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #94a3b8;
+      transition: .25s;
+      border-radius: 50%;
+    }
+    input:checked + .switch-ui-slider {
+      background-color: #10b981;
+      border-color: #34d399;
+    }
+    input:checked + .switch-ui-slider:before {
+      transform: translateX(16px);
+      background-color: #ffffff;
+    }
+    /* Auto Bet Gold Highlight */
+    .switch-gold input:checked + .switch-ui-slider {
+      background-color: #f59e0b;
+      border-color: #fbbf24;
+    }
   </style>
 </head>
 <body class="bg-[#0b0d13] text-gray-100 flex flex-col min-h-screen relative">
@@ -143,7 +189,7 @@
       <div class="min-w-0 flex flex-col justify-center">
         <div class="flex items-center gap-1.5 flex-wrap">
           <span class="font-black tracking-wider text-white text-sm sm:text-lg italic truncate">AVIATOR <span class="text-red-500 font-extrabold text-xs sm:text-base">CLASSIC</span></span>
-          <span class="text-[9px] sm:text-[10px] bg-red-600/30 text-red-400 font-semibold px-1 py-0.2 rounded border border-red-500/30 flex-shrink-0">v1.5.3</span>
+          <span class="text-[9px] sm:text-[10px] bg-red-600/30 text-red-400 font-semibold px-1 py-0.2 rounded border border-red-500/30 flex-shrink-0">v1.5.4</span>
         </div>
         <div class="flex items-center gap-1.5 text-[9px] sm:text-xs text-gray-400 truncate">
           <span class="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
@@ -203,7 +249,7 @@
       <div id="liveBetsList" class="flex-1 overflow-y-auto divide-y divide-[#181a24] text-xs font-mono-num p-1"></div>
     </section>
 
-    <!-- CENTER & RIGHT: RADAR CANVAS & BET CONTROLS -->
+    <!-- CENTER & RIGHT: RADAR CANVAS & COMPACT STREAMLINED BET DESKS -->
     <section class="flex-1 flex flex-col gap-3 order-1 lg:order-2">
       
       <!-- RADAR CANVAS CONTAINER -->
@@ -234,69 +280,78 @@
         </div>
       </div>
 
-      <!-- DUAL BETTING DESKS -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <!-- DUAL STREAMLINED BET DESKS (COMPACT HEIGHT & TOP-LINE CONTROLS) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
         
-        <!-- BET DESK #1 -->
-        <div class="bg-[#12141c] border border-[#202537] rounded-2xl p-3 sm:p-4 shadow-lg flex flex-col justify-between">
-          <div class="flex items-center justify-between pb-2 mb-2 border-b border-[#1d2130]">
-            <div class="flex items-center gap-2">
+        <!-- BET 1 -->
+        <div class="bg-[#12141c] border border-[#202537] rounded-2xl p-2.5 sm:p-3 shadow-lg flex flex-col justify-between gap-2">
+          
+          <!-- TOP ROW: TITLE "Bet 1" & INLINE CONTROLS (AUTO BET + AUTO OUT + DYNAMIC TARGET) -->
+          <div class="flex items-center justify-between pb-1.5 border-b border-[#1d2130] gap-1.5 flex-wrap">
+            <div class="flex items-center gap-1.5 flex-shrink-0">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-              <span class="font-bold text-xs uppercase tracking-wider text-gray-200">Bet Station 1</span>
+              <span class="font-extrabold text-xs uppercase tracking-wider text-gray-100">Bet 1</span>
             </div>
             
-            <div class="flex items-center gap-3">
-              <label class="flex items-center gap-1.5 cursor-pointer text-xs">
-                <span class="text-gray-400 text-[11px]">Auto Bet</span>
-                <input type="checkbox" id="autoBet1" onchange="toggleAutoBet(1)" class="w-4 h-4 accent-amber-500 rounded cursor-pointer">
-              </label>
-              <label class="flex items-center gap-1.5 cursor-pointer text-xs">
-                <span class="text-gray-400 text-[11px]">Auto Out</span>
-                <input type="checkbox" id="autoCashoutToggle1" class="w-4 h-4 accent-emerald-500 rounded cursor-pointer">
-              </label>
+            <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 ml-auto">
+              <!-- Auto Bet Toggle -->
+              <div class="flex items-center gap-1.5">
+                <span class="text-gray-400 text-[10px] font-semibold">Auto</span>
+                <label class="switch-ui switch-gold">
+                  <input type="checkbox" id="autoBet1" onchange="toggleAutoBet(1)">
+                  <span class="switch-ui-slider"></span>
+                </label>
+              </div>
+
+              <!-- Auto Out Toggle -->
+              <div class="flex items-center gap-1.5">
+                <span class="text-gray-400 text-[10px] font-semibold">Auto Out</span>
+                <label class="switch-ui">
+                  <input type="checkbox" id="autoCashoutToggle1" onchange="toggleAutoCashoutView(1)">
+                  <span class="switch-ui-slider"></span>
+                </label>
+              </div>
+
+              <!-- Sleek Target Input Box (Hidden until Auto Out is toggled ON) -->
+              <div id="autoCashoutBox1" class="hidden items-center bg-[#191b26] border border-amber-500/50 rounded-lg px-1.5 py-0.5 animate-fadeIn">
+                <input type="number" id="autoCashoutMult1" value="2.00" step="0.10" min="1.01" class="w-11 bg-transparent text-right font-bold text-xs text-amber-400 focus:outline-none font-mono-num">
+                <span class="text-amber-400 font-bold text-xs ml-0.5">x</span>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-12 gap-2 sm:gap-3 items-center">
-            <div class="col-span-7 flex flex-col gap-2">
+          <!-- CONTROLS & ACTION ROW -->
+          <div class="grid grid-cols-12 gap-2 items-center">
+            <div class="col-span-7 flex flex-col gap-1.5">
               
-              <!-- HIGH-VISIBILITY ENLARGED BET ADJUSTER (SEPARATED TOUCH TARGETS) -->
-              <div class="flex items-center bg-[#181a25] border border-[#272c3d] rounded-2xl p-1 gap-1 shadow-inner">
-                <!-- Large minus button -->
-                <button onclick="adjustBet(1, -10)" class="w-12 h-11 sm:w-11 sm:h-10 rounded-xl bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-xl flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
+              <!-- Large Stepper Bet Adjuster -->
+              <div class="flex items-center bg-[#181a25] border border-[#272c3d] rounded-xl p-1 gap-1 shadow-inner">
+                <button onclick="adjustBet(1, -10)" class="w-10 h-9 sm:w-10 sm:h-9 rounded-lg bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-lg flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
                   -
                 </button>
 
                 <div class="flex-1 flex items-center justify-center px-1 min-w-0">
                   <span class="text-gray-400 text-xs font-semibold mr-1">₹</span>
-                  <input type="number" id="betAmount1" value="20" min="10" step="10" class="w-full bg-transparent text-center font-bold font-mono-num text-base sm:text-lg text-white focus:outline-none">
+                  <input type="number" id="betAmount1" value="20" min="10" step="10" class="w-full bg-transparent text-center font-bold font-mono-num text-base text-white focus:outline-none">
                 </div>
 
-                <!-- Large plus button -->
-                <button onclick="adjustBet(1, 10)" class="w-12 h-11 sm:w-11 sm:h-10 rounded-xl bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-xl flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
+                <button onclick="adjustBet(1, 10)" class="w-10 h-9 sm:w-10 sm:h-9 rounded-lg bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-lg flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
                   +
                 </button>
               </div>
 
-              <!-- Quick Chip Buttons -->
+              <!-- Quick Chips -->
               <div class="grid grid-cols-4 gap-1">
-                <button onclick="setBet(1, 20)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">20</button>
-                <button onclick="setBet(1, 50)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">50</button>
-                <button onclick="setBet(1, 100)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">100</button>
-                <button onclick="setBet(1, 200)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">200</button>
-              </div>
-
-              <div class="flex items-center justify-between text-[11px] bg-[#151722] px-2.5 py-1 rounded-lg border border-[#212435]">
-                <span class="text-gray-400">Cashout Target:</span>
-                <div class="flex items-center gap-1 font-mono-num">
-                  <input type="number" id="autoCashoutMult1" value="2.00" step="0.10" min="1.01" class="w-14 bg-transparent text-right font-bold text-amber-400 focus:outline-none">
-                  <span class="text-amber-400 font-bold">x</span>
-                </div>
+                <button onclick="setBet(1, 20)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300 active:scale-95">20</button>
+                <button onclick="setBet(1, 50)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300 active:scale-95">50</button>
+                <button onclick="setBet(1, 100)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300 active:scale-95">100</button>
+                <button onclick="setBet(1, 200)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300 active:scale-95">200</button>
               </div>
             </div>
 
+            <!-- Compact Streamlined Action Button -->
             <div class="col-span-5 h-full">
-              <button id="actionBtn1" onclick="handleActionBtn(1)" class="w-full h-full min-h-[96px] rounded-xl flex flex-col items-center justify-center p-2 text-white font-extrabold transition-all duration-150 active:scale-95 btn-bet-ready">
+              <button id="actionBtn1" onclick="handleActionBtn(1)" class="w-full h-full min-h-[70px] sm:min-h-[74px] rounded-xl flex flex-col items-center justify-center p-1.5 text-white font-extrabold transition-all duration-150 active:scale-95 btn-bet-ready shadow-md">
                 <span id="btnLabel1" class="text-base sm:text-lg uppercase tracking-wider">BET</span>
                 <span id="btnSub1" class="text-xs font-mono-num opacity-90">₹20.00</span>
               </button>
@@ -304,66 +359,75 @@
           </div>
         </div>
 
-        <!-- BET DESK #2 -->
-        <div class="bg-[#12141c] border border-[#202537] rounded-2xl p-3 sm:p-4 shadow-lg flex flex-col justify-between">
-          <div class="flex items-center justify-between pb-2 mb-2 border-b border-[#1d2130]">
-            <div class="flex items-center gap-2">
+        <!-- BET 2 -->
+        <div class="bg-[#12141c] border border-[#202537] rounded-2xl p-2.5 sm:p-3 shadow-lg flex flex-col justify-between gap-2">
+          
+          <!-- TOP ROW: TITLE "Bet 2" & INLINE CONTROLS -->
+          <div class="flex items-center justify-between pb-1.5 border-b border-[#1d2130] gap-1.5 flex-wrap">
+            <div class="flex items-center gap-1.5 flex-shrink-0">
               <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
-              <span class="font-bold text-xs uppercase tracking-wider text-gray-200">Bet Station 2</span>
+              <span class="font-extrabold text-xs uppercase tracking-wider text-gray-100">Bet 2</span>
             </div>
             
-            <div class="flex items-center gap-3">
-              <label class="flex items-center gap-1.5 cursor-pointer text-xs">
-                <span class="text-gray-400 text-[11px]">Auto Bet</span>
-                <input type="checkbox" id="autoBet2" onchange="toggleAutoBet(2)" class="w-4 h-4 accent-amber-500 rounded cursor-pointer">
-              </label>
-              <label class="flex items-center gap-1.5 cursor-pointer text-xs">
-                <span class="text-gray-400 text-[11px]">Auto Out</span>
-                <input type="checkbox" id="autoCashoutToggle2" class="w-4 h-4 accent-emerald-500 rounded cursor-pointer">
-              </label>
+            <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 ml-auto">
+              <!-- Auto Bet Toggle -->
+              <div class="flex items-center gap-1.5">
+                <span class="text-gray-400 text-[10px] font-semibold">Auto</span>
+                <label class="switch-ui switch-gold">
+                  <input type="checkbox" id="autoBet2" onchange="toggleAutoBet(2)">
+                  <span class="switch-ui-slider"></span>
+                </label>
+              </div>
+
+              <!-- Auto Out Toggle -->
+              <div class="flex items-center gap-1.5">
+                <span class="text-gray-400 text-[10px] font-semibold">Auto Out</span>
+                <label class="switch-ui">
+                  <input type="checkbox" id="autoCashoutToggle2" onchange="toggleAutoCashoutView(2)">
+                  <span class="switch-ui-slider"></span>
+                </label>
+              </div>
+
+              <!-- Sleek Target Input Box (Hidden until Auto Out is toggled ON) -->
+              <div id="autoCashoutBox2" class="hidden items-center bg-[#191b26] border border-amber-500/50 rounded-lg px-1.5 py-0.5 animate-fadeIn">
+                <input type="number" id="autoCashoutMult2" value="1.50" step="0.10" min="1.01" class="w-11 bg-transparent text-right font-bold text-xs text-amber-400 focus:outline-none font-mono-num">
+                <span class="text-amber-400 font-bold text-xs ml-0.5">x</span>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-12 gap-2 sm:gap-3 items-center">
-            <div class="col-span-7 flex flex-col gap-2">
+          <!-- CONTROLS & ACTION ROW -->
+          <div class="grid grid-cols-12 gap-2 items-center">
+            <div class="col-span-7 flex flex-col gap-1.5">
               
-              <!-- HIGH-VISIBILITY ENLARGED BET ADJUSTER (SEPARATED TOUCH TARGETS) -->
-              <div class="flex items-center bg-[#181a25] border border-[#272c3d] rounded-2xl p-1 gap-1 shadow-inner">
-                <!-- Large minus button -->
-                <button onclick="adjustBet(2, -10)" class="w-12 h-11 sm:w-11 sm:h-10 rounded-xl bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-xl flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
+              <!-- Large Stepper Bet Adjuster -->
+              <div class="flex items-center bg-[#181a25] border border-[#272c3d] rounded-xl p-1 gap-1 shadow-inner">
+                <button onclick="adjustBet(2, -10)" class="w-10 h-9 sm:w-10 sm:h-9 rounded-lg bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-lg flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
                   -
                 </button>
 
                 <div class="flex-1 flex items-center justify-center px-1 min-w-0">
                   <span class="text-gray-400 text-xs font-semibold mr-1">₹</span>
-                  <input type="number" id="betAmount2" value="50" min="10" step="10" class="w-full bg-transparent text-center font-bold font-mono-num text-base sm:text-lg text-white focus:outline-none">
+                  <input type="number" id="betAmount2" value="50" min="10" step="10" class="w-full bg-transparent text-center font-bold font-mono-num text-base text-white focus:outline-none">
                 </div>
 
-                <!-- Large plus button -->
-                <button onclick="adjustBet(2, 10)" class="w-12 h-11 sm:w-11 sm:h-10 rounded-xl bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-xl flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
+                <button onclick="adjustBet(2, 10)" class="w-10 h-9 sm:w-10 sm:h-9 rounded-lg bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-lg flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
                   +
                 </button>
               </div>
 
-              <!-- Quick Chip Buttons -->
+              <!-- Quick Chips -->
               <div class="grid grid-cols-4 gap-1">
-                <button onclick="setBet(2, 20)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">20</button>
-                <button onclick="setBet(2, 50)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">50</button>
-                <button onclick="setBet(2, 100)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">100</button>
-                <button onclick="setBet(2, 500)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">500</button>
-              </div>
-
-              <div class="flex items-center justify-between text-[11px] bg-[#151722] px-2.5 py-1 rounded-lg border border-[#212435]">
-                <span class="text-gray-400">Cashout Target:</span>
-                <div class="flex items-center gap-1 font-mono-num">
-                  <input type="number" id="autoCashoutMult2" value="1.50" step="0.10" min="1.01" class="w-14 bg-transparent text-right font-bold text-amber-400 focus:outline-none">
-                  <span class="text-amber-400 font-bold">x</span>
-                </div>
+                <button onclick="setBet(2, 20)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300 active:scale-95">20</button>
+                <button onclick="setBet(2, 50)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300 active:scale-95">50</button>
+                <button onclick="setBet(2, 100)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300 active:scale-95">100</button>
+                <button onclick="setBet(2, 500)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300 active:scale-95">500</button>
               </div>
             </div>
 
+            <!-- Compact Streamlined Action Button -->
             <div class="col-span-5 h-full">
-              <button id="actionBtn2" onclick="handleActionBtn(2)" class="w-full h-full min-h-[96px] rounded-xl flex flex-col items-center justify-center p-2 text-white font-extrabold transition-all duration-150 active:scale-95 btn-bet-ready">
+              <button id="actionBtn2" onclick="handleActionBtn(2)" class="w-full h-full min-h-[70px] sm:min-h-[74px] rounded-xl flex flex-col items-center justify-center p-1.5 text-white font-extrabold transition-all duration-150 active:scale-95 btn-bet-ready shadow-md">
                 <span id="btnLabel2" class="text-base sm:text-lg uppercase tracking-wider">BET</span>
                 <span id="btnSub2" class="text-xs font-mono-num opacity-90">₹50.00</span>
               </button>
@@ -399,7 +463,6 @@
 
       <!-- TAB 1: ADD FUNDS -->
       <div id="tabContentAdd" class="p-5 flex-1 overflow-y-auto space-y-4">
-        
         <div id="addStep1">
           <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Enter Deposit Amount (₹)</label>
           <div class="flex items-center bg-[#191b26] border border-[#2c3146] rounded-xl px-3 py-2.5 mb-2 focus-within:border-red-500 transition">
@@ -485,12 +548,10 @@
           <p id="approvedSuccessMsg" class="text-xs text-gray-300">₹500.00 has been credited successfully to your Aviator wallet.</p>
           <button onclick="closeFundsModal()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider">Back to Game</button>
         </div>
-
       </div>
 
       <!-- TAB 2: WITHDRAW FUNDS -->
       <div id="tabContentWithdraw" class="p-5 flex-1 overflow-y-auto space-y-4 hidden">
-        
         <div id="withdrawStep1" class="space-y-3.5">
           <div>
             <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Withdrawal Amount (₹)</label>
@@ -507,25 +568,20 @@
             </div>
           </div>
 
-          <!-- Payout Method Selection -->
           <div>
             <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Select Payout Method</label>
             <div class="grid grid-cols-3 gap-2">
-              
-              <!-- UPI -->
               <div id="methodCardUPI" onclick="setWithdrawMethod('UPI')" class="p-2 rounded-xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDpQ1oOgqV-At8wx8eMbo9sqrMz34hVIRF7cQZiAyGSA&s=10" class="w-6 h-6 rounded object-contain bg-white p-0.5" alt="UPI">
                 <span class="text-[11px] font-bold text-white">UPI ID</span>
               </div>
 
-              <!-- AMAZON PAY (TEMPORARILY NOT WORKING STATUS) -->
               <div id="methodCardAmazon" onclick="setWithdrawMethod('Amazon')" class="relative p-2 rounded-xl border border-gray-700/60 bg-[#161822] cursor-not-allowed flex flex-col items-center justify-center gap-1.5 transition text-center opacity-75">
                 <span class="absolute -top-1.5 -right-1 bg-amber-500 text-black font-extrabold text-[8px] px-1.5 py-0.2 rounded-full uppercase shadow">Offline</span>
                 <img src="https://www.talkandroid.com/wp-content/uploads/2014/07/amazon_wallet_app_icon.png" class="w-6 h-6 rounded object-cover bg-white p-0.5 grayscale" alt="Amazon">
                 <span class="text-[10px] font-bold text-gray-400">Amazon Pay</span>
               </div>
 
-              <!-- NEFT Bank -->
               <div id="methodCardNEFT" onclick="setWithdrawMethod('NEFT')" class="p-2 rounded-xl border border-[#282d42] bg-[#181a26] cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center">
                 <img src="https://suncrypto.in/assetsnew/img/neft.png" class="w-6 h-6 rounded object-contain bg-white p-0.5" alt="NEFT Bank">
                 <span class="text-[11px] font-bold text-white">NEFT Bank</span>
@@ -533,7 +589,6 @@
             </div>
           </div>
 
-          <!-- Dynamic Form Inputs -->
           <div id="simplePayoutField">
             <label id="withdrawTargetLabel" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Enter UPI ID (e.g. mobile@upi)</label>
             <input type="text" id="withdrawTargetInput" placeholder="username@okhdfcbank" class="w-full bg-[#191b26] border border-[#2c3146] rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500 font-mono">
@@ -613,7 +668,6 @@
           </div>
           <button onclick="closeFundsModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold text-xs uppercase tracking-wider">Done</button>
         </div>
-
       </div>
 
     </div>
@@ -626,9 +680,8 @@
     ============================================================== */
     const PLANE_SPRITE_URL = 'https://i.postimg.cc/kg5zXw0y/image.png';
     const UPI_VPA = 'lilaanas6-3@okicici';
-    const STORAGE_KEY_WALLET = 'aviator_classic_wallet_v153';
+    const STORAGE_KEY_WALLET = 'aviator_classic_wallet_v154';
 
-    // Helper: Guaranteed clean numeric formatting
     function safeNum(val, fallback = 1.00) {
       const n = parseFloat(val);
       return (!isNaN(n) && isFinite(n)) ? n : fallback;
@@ -638,7 +691,6 @@
       return safeNum(val, 1.00).toFixed(2) + 'x';
     }
 
-    // Initialize or load wallet balance (Default 200.00)
     let wallet = 200.00;
     const savedWallet = localStorage.getItem(STORAGE_KEY_WALLET);
     if (savedWallet !== null) {
@@ -649,26 +701,22 @@
 
     let selectedWithdrawMethod = 'UPI';
 
-    // Game Lifecycle States: 'COUNTDOWN', 'FLYING', 'CRASHED'
     let gameState = 'COUNTDOWN';
     let stateStartTime = performance.now();
     let currentMultiplier = 1.00;
     let crashMultiplier = 2.00;
     let lastSecondBeep = -1;
 
-    // Betting Stations
     const betStations = {
       1: { amount: 20.0, state: 'IDLE', autoBet: false, cashedOutAt: 0, winAmount: 0 },
       2: { amount: 50.0, state: 'IDLE', autoBet: false, cashedOutAt: 0, winAmount: 0 }
     };
 
-    // Airplane Sprite
     const planeImg = new Image();
     planeImg.src = PLANE_SPRITE_URL;
     let planeLoaded = false;
     planeImg.onload = () => { planeLoaded = true; };
 
-    // Canvas references
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     let canvasWidth = 800;
@@ -952,8 +1000,20 @@
     }
 
     /* ==============================================================
-       5. BETTING CONTROLS
+       5. BETTING & INLINE AUTO CASHOUT CONTROLS
     ============================================================== */
+    function toggleAutoCashoutView(id) {
+      const chk = document.getElementById(`autoCashoutToggle${id}`);
+      const box = document.getElementById(`autoCashoutBox${id}`);
+      if (chk.checked) {
+        box.classList.remove('hidden');
+        box.classList.add('flex');
+      } else {
+        box.classList.add('hidden');
+        box.classList.remove('flex');
+      }
+    }
+
     function adjustBet(id, delta) {
       const input = document.getElementById(`betAmount${id}`);
       let val = Math.max(10, safeNum(input.value, 10) + delta);
@@ -1082,12 +1142,12 @@
       const label = document.getElementById(`btnLabel${id}`);
       const sub = document.getElementById(`btnSub${id}`);
 
-      btn.className = "w-full h-full min-h-[96px] rounded-xl flex flex-col items-center justify-center p-2 text-white font-extrabold transition-all duration-150 active:scale-95";
+      btn.className = "w-full h-full min-h-[70px] sm:min-h-[74px] rounded-xl flex flex-col items-center justify-center p-1.5 text-white font-extrabold transition-all duration-150 active:scale-95 shadow-md";
 
       if (gameState === 'FLYING' && station.state === 'IDLE') {
         btn.classList.add('btn-bet-flight-locked');
-        label.innerText = 'WAIT FOR NEXT';
-        sub.innerText = 'Round Started';
+        label.innerText = 'WAIT';
+        sub.innerText = 'In Flight';
         return;
       }
 
@@ -1585,24 +1645,16 @@
     }
 
     /* ==============================================================
-       9. RIGOROUS MOBILE GESTURE & PINCH/DOUBLE-TAP ZOOM SHIELD
+       9. GESTURE & PINCH ZOOM PREVENTION (PRESERVES INSTANT TAPPING)
     ============================================================== */
-    // Prevent double-tap zoom
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', (e) => {
-      const now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, { passive: false });
-
-    // Prevent multi-touch gesture zoom (pinch-to-zoom)
+    // Block pinch-to-zoom gestures without delaying single or rapid taps
     document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
     document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
     document.addEventListener('gestureend', (e) => e.preventDefault(), { passive: false });
+    
+    // Block multi-touch zoom attempts
     document.addEventListener('touchmove', (e) => {
-      if (e.touches.length > 1) {
+      if (e.touches && e.touches.length > 1) {
         e.preventDefault();
       }
     }, { passive: false });
