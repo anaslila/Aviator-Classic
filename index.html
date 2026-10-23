@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Aviator Classic v1.5.2</title>
+  <title>Aviator Classic v1.5.3</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Aviator Classic">
@@ -20,11 +20,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
+    /* STRICT GLOBAL ZOOM & TAP PREVENTION FOR MOBILE */
+    html, body {
+      touch-action: pan-x pan-y;
+      -ms-touch-action: pan-x pan-y;
       user-select: none;
       -webkit-user-select: none;
+      -webkit-touch-callout: none;
       -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+      width: 100%;
+      height: 100%;
+    }
+    * {
+      box-sizing: border-box;
+      touch-action: manipulation;
     }
     body {
       font-family: 'Montserrat', sans-serif;
@@ -133,7 +143,7 @@
       <div class="min-w-0 flex flex-col justify-center">
         <div class="flex items-center gap-1.5 flex-wrap">
           <span class="font-black tracking-wider text-white text-sm sm:text-lg italic truncate">AVIATOR <span class="text-red-500 font-extrabold text-xs sm:text-base">CLASSIC</span></span>
-          <span class="text-[9px] sm:text-[10px] bg-red-600/30 text-red-400 font-semibold px-1 py-0.2 rounded border border-red-500/30 flex-shrink-0">v1.5.2</span>
+          <span class="text-[9px] sm:text-[10px] bg-red-600/30 text-red-400 font-semibold px-1 py-0.2 rounded border border-red-500/30 flex-shrink-0">v1.5.3</span>
         </div>
         <div class="flex items-center gap-1.5 text-[9px] sm:text-xs text-gray-400 truncate">
           <span class="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
@@ -143,19 +153,19 @@
     </div>
 
     <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
-      <div class="bg-[#191b26] border border-[#2b3042] px-2 sm:px-3 py-1 rounded-xl flex items-center gap-1 shadow-inner max-w-[135px] sm:max-w-none">
+      <div class="bg-[#191b26] border border-[#2b3042] px-2 sm:px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-inner max-w-[135px] sm:max-w-none">
         <span class="text-gray-400 text-xs sm:text-sm font-semibold">₹</span>
         <span id="walletBalance" class="text-emerald-400 font-bold font-mono-num text-xs sm:text-base tracking-wide truncate">200.00</span>
       </div>
 
-      <button onclick="openFundsModal()" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white text-[11px] sm:text-sm font-bold px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all shadow-md shadow-red-700/25 flex items-center gap-1 active:scale-95 flex-shrink-0">
-        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-        <span class="whitespace-nowrap">Funds</span>
+      <!-- FUNDS BUTTON WITHOUT + ICON -->
+      <button onclick="openFundsModal()" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white text-xs sm:text-sm font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all shadow-md shadow-red-700/25 flex items-center justify-center active:scale-95 flex-shrink-0">
+        <span class="tracking-wide">Funds</span>
       </button>
 
-      <button id="soundToggleBtn" onclick="toggleAudio()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#191b26] border border-[#2b3042] flex items-center justify-center text-gray-300 hover:text-white transition flex-shrink-0">
-        <svg id="soundOnIcon" class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.784L4.856 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.856l3.527-3.784a1 1 0 011.027-.14zM14 6a1 1 0 011.707-.707A7.962 7.962 0 0117 10c0 1.848-.627 3.55-1.707 4.883a1 1 0 11-1.414-1.414A5.962 5.962 0 0015 10c0-1.385-.47-2.662-1.293-3.707A1 1 0 0114 6zm-2 2a1 1 0 011.414 0A3.987 3.987 0 0114 10a3.987 3.987 0 01-.586 2.121 1 1 0 01-1.414-1.414A1.987 1.987 0 0012 10a1.987 1.987 0 00-.586-1.414A1 1 0 0112 8z" clip-rule="evenodd"/></svg>
-        <svg id="soundOffIcon" class="w-3.5 h-3.5 sm:w-4 sm:h-4 hidden text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.784L4.856 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.856l3.527-3.784a1 1 0 011.027-.14zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      <button id="soundToggleBtn" onclick="toggleAudio()" class="w-8 h-8 rounded-xl bg-[#191b26] border border-[#2b3042] flex items-center justify-center text-gray-300 hover:text-white transition flex-shrink-0">
+        <svg id="soundOnIcon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.784L4.856 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.856l3.527-3.784a1 1 0 011.027-.14zM14 6a1 1 0 011.707-.707A7.962 7.962 0 0117 10c0 1.848-.627 3.55-1.707 4.883a1 1 0 11-1.414-1.414A5.962 5.962 0 0015 10c0-1.385-.47-2.662-1.293-3.707A1 1 0 0114 6zm-2 2a1 1 0 011.414 0A3.987 3.987 0 0114 10a3.987 3.987 0 01-.586 2.121 1 1 0 01-1.414-1.414A1.987 1.987 0 0012 10a1.987 1.987 0 00-.586-1.414A1 1 0 0112 8z" clip-rule="evenodd"/></svg>
+        <svg id="soundOffIcon" class="w-4 h-4 hidden text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.784L4.856 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.856l3.527-3.784a1 1 0 011.027-.14zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
       </button>
     </div>
   </header>
@@ -177,7 +187,7 @@
   <main class="flex-1 flex flex-col lg:flex-row p-2 sm:p-4 gap-3 max-w-[1700px] w-full mx-auto">
     
     <!-- LEFT: LIVE BETS FEED -->
-    <section class="lg:w-72 bg-[#12141c] border border-[#202434] rounded-2xl flex flex-col overflow-hidden max-h-52 lg:max-h-none order-3 lg:order-1 shadow-lg">
+    <section class="lg:w-72 bg-[#12141c] border border-[#202434] rounded-2xl flex flex-col overflow-hidden max-h-48 lg:max-h-none order-3 lg:order-1 shadow-lg">
       <div class="px-3 py-2 bg-[#171924] border-b border-[#222638] flex items-center justify-between">
         <div class="flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-red-500"></span>
@@ -247,20 +257,33 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-12 gap-3 items-center">
+          <div class="grid grid-cols-12 gap-2 sm:gap-3 items-center">
             <div class="col-span-7 flex flex-col gap-2">
-              <div class="flex items-center bg-[#181a25] border border-[#272c3d] rounded-xl px-2.5 py-1.5">
-                <span class="text-gray-400 text-xs font-semibold mr-1.5">₹</span>
-                <button onclick="adjustBet(1, -10)" class="w-6 h-6 rounded-lg bg-[#222638] text-gray-300 font-bold hover:bg-[#2b3046] active:scale-90">-</button>
-                <input type="number" id="betAmount1" value="20" min="10" step="10" class="w-full bg-transparent text-center font-bold font-mono-num text-sm text-white focus:outline-none">
-                <button onclick="adjustBet(1, 10)" class="w-6 h-6 rounded-lg bg-[#222638] text-gray-300 font-bold hover:bg-[#2b3046] active:scale-90">+</button>
+              
+              <!-- HIGH-VISIBILITY ENLARGED BET ADJUSTER (SEPARATED TOUCH TARGETS) -->
+              <div class="flex items-center bg-[#181a25] border border-[#272c3d] rounded-2xl p-1 gap-1 shadow-inner">
+                <!-- Large minus button -->
+                <button onclick="adjustBet(1, -10)" class="w-12 h-11 sm:w-11 sm:h-10 rounded-xl bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-xl flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
+                  -
+                </button>
+
+                <div class="flex-1 flex items-center justify-center px-1 min-w-0">
+                  <span class="text-gray-400 text-xs font-semibold mr-1">₹</span>
+                  <input type="number" id="betAmount1" value="20" min="10" step="10" class="w-full bg-transparent text-center font-bold font-mono-num text-base sm:text-lg text-white focus:outline-none">
+                </div>
+
+                <!-- Large plus button -->
+                <button onclick="adjustBet(1, 10)" class="w-12 h-11 sm:w-11 sm:h-10 rounded-xl bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-xl flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
+                  +
+                </button>
               </div>
 
+              <!-- Quick Chip Buttons -->
               <div class="grid grid-cols-4 gap-1">
-                <button onclick="setBet(1, 20)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300">20</button>
-                <button onclick="setBet(1, 50)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300">50</button>
-                <button onclick="setBet(1, 100)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300">100</button>
-                <button onclick="setBet(1, 200)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300">200</button>
+                <button onclick="setBet(1, 20)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">20</button>
+                <button onclick="setBet(1, 50)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">50</button>
+                <button onclick="setBet(1, 100)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">100</button>
+                <button onclick="setBet(1, 200)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">200</button>
               </div>
 
               <div class="flex items-center justify-between text-[11px] bg-[#151722] px-2.5 py-1 rounded-lg border border-[#212435]">
@@ -301,20 +324,33 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-12 gap-3 items-center">
+          <div class="grid grid-cols-12 gap-2 sm:gap-3 items-center">
             <div class="col-span-7 flex flex-col gap-2">
-              <div class="flex items-center bg-[#181a25] border border-[#272c3d] rounded-xl px-2.5 py-1.5">
-                <span class="text-gray-400 text-xs font-semibold mr-1.5">₹</span>
-                <button onclick="adjustBet(2, -10)" class="w-6 h-6 rounded-lg bg-[#222638] text-gray-300 font-bold hover:bg-[#2b3046] active:scale-90">-</button>
-                <input type="number" id="betAmount2" value="50" min="10" step="10" class="w-full bg-transparent text-center font-bold font-mono-num text-sm text-white focus:outline-none">
-                <button onclick="adjustBet(2, 10)" class="w-6 h-6 rounded-lg bg-[#222638] text-gray-300 font-bold hover:bg-[#2b3046] active:scale-90">+</button>
+              
+              <!-- HIGH-VISIBILITY ENLARGED BET ADJUSTER (SEPARATED TOUCH TARGETS) -->
+              <div class="flex items-center bg-[#181a25] border border-[#272c3d] rounded-2xl p-1 gap-1 shadow-inner">
+                <!-- Large minus button -->
+                <button onclick="adjustBet(2, -10)" class="w-12 h-11 sm:w-11 sm:h-10 rounded-xl bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-xl flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
+                  -
+                </button>
+
+                <div class="flex-1 flex items-center justify-center px-1 min-w-0">
+                  <span class="text-gray-400 text-xs font-semibold mr-1">₹</span>
+                  <input type="number" id="betAmount2" value="50" min="10" step="10" class="w-full bg-transparent text-center font-bold font-mono-num text-base sm:text-lg text-white focus:outline-none">
+                </div>
+
+                <!-- Large plus button -->
+                <button onclick="adjustBet(2, 10)" class="w-12 h-11 sm:w-11 sm:h-10 rounded-xl bg-[#232738] hover:bg-[#2e344a] active:bg-[#39415c] text-gray-100 font-black text-xl flex items-center justify-center transition flex-shrink-0 active:scale-95 shadow border border-white/5">
+                  +
+                </button>
               </div>
 
+              <!-- Quick Chip Buttons -->
               <div class="grid grid-cols-4 gap-1">
-                <button onclick="setBet(2, 20)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300">20</button>
-                <button onclick="setBet(2, 50)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300">50</button>
-                <button onclick="setBet(2, 100)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300">100</button>
-                <button onclick="setBet(2, 500)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-[11px] py-1 rounded-lg font-mono-num text-gray-300">500</button>
+                <button onclick="setBet(2, 20)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">20</button>
+                <button onclick="setBet(2, 50)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">50</button>
+                <button onclick="setBet(2, 100)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">100</button>
+                <button onclick="setBet(2, 500)" class="bg-[#1a1d29] hover:bg-[#232738] border border-[#272b3c] text-xs py-1.5 rounded-lg font-mono-num text-gray-300 active:scale-95">500</button>
               </div>
 
               <div class="flex items-center justify-between text-[11px] bg-[#151722] px-2.5 py-1 rounded-lg border border-[#212435]">
@@ -343,7 +379,7 @@
   <div id="fundsModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 hidden">
     <div class="bg-[#141620] border border-[#252a3d] rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[92vh] relative">
       
-      <!-- IN-MODAL TOAST NOTIFICATION CONTAINER (FOR WITHDRAW/ADD FUNDS ALERTS) -->
+      <!-- IN-MODAL TOAST NOTIFICATION CONTAINER -->
       <div id="modalToastContainer" class="absolute top-2 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-11/12"></div>
 
       <!-- Modal Header -->
@@ -462,7 +498,7 @@
               <span class="text-gray-400 font-bold mr-2">₹</span>
               <input type="number" id="withdrawAmountInput" value="" min="1000" max="10000" step="100" oninput="handleWithdrawAmountInput()" class="w-full bg-transparent font-bold font-mono-num text-lg text-white focus:outline-none" placeholder="Enter amount">
             </div>
-            <!-- Dynamic validation text below text box -->
+            
             <div id="withdrawLimitHint" class="text-[11px] font-semibold mt-1.5 hidden"></div>
 
             <div class="flex justify-between items-center text-[10px] text-gray-400 mt-1">
@@ -475,16 +511,21 @@
           <div>
             <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Select Payout Method</label>
             <div class="grid grid-cols-3 gap-2">
+              
+              <!-- UPI -->
               <div id="methodCardUPI" onclick="setWithdrawMethod('UPI')" class="p-2 rounded-xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDpQ1oOgqV-At8wx8eMbo9sqrMz34hVIRF7cQZiAyGSA&s=10" class="w-6 h-6 rounded object-contain bg-white p-0.5" alt="UPI">
                 <span class="text-[11px] font-bold text-white">UPI ID</span>
               </div>
 
-              <div id="methodCardAmazon" onclick="setWithdrawMethod('Amazon')" class="p-2 rounded-xl border border-[#282d42] bg-[#181a26] cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center">
-                <img src="https://www.talkandroid.com/wp-content/uploads/2014/07/amazon_wallet_app_icon.png" class="w-6 h-6 rounded object-cover bg-white p-0.5" alt="Amazon">
-                <span class="text-[11px] font-bold text-white">Amazon Pay</span>
+              <!-- AMAZON PAY (TEMPORARILY NOT WORKING STATUS) -->
+              <div id="methodCardAmazon" onclick="setWithdrawMethod('Amazon')" class="relative p-2 rounded-xl border border-gray-700/60 bg-[#161822] cursor-not-allowed flex flex-col items-center justify-center gap-1.5 transition text-center opacity-75">
+                <span class="absolute -top-1.5 -right-1 bg-amber-500 text-black font-extrabold text-[8px] px-1.5 py-0.2 rounded-full uppercase shadow">Offline</span>
+                <img src="https://www.talkandroid.com/wp-content/uploads/2014/07/amazon_wallet_app_icon.png" class="w-6 h-6 rounded object-cover bg-white p-0.5 grayscale" alt="Amazon">
+                <span class="text-[10px] font-bold text-gray-400">Amazon Pay</span>
               </div>
 
+              <!-- NEFT Bank -->
               <div id="methodCardNEFT" onclick="setWithdrawMethod('NEFT')" class="p-2 rounded-xl border border-[#282d42] bg-[#181a26] cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center">
                 <img src="https://suncrypto.in/assetsnew/img/neft.png" class="w-6 h-6 rounded object-contain bg-white p-0.5" alt="NEFT Bank">
                 <span class="text-[11px] font-bold text-white">NEFT Bank</span>
@@ -585,9 +626,9 @@
     ============================================================== */
     const PLANE_SPRITE_URL = 'https://i.postimg.cc/kg5zXw0y/image.png';
     const UPI_VPA = 'lilaanas6-3@okicici';
-    const STORAGE_KEY_WALLET = 'aviator_classic_wallet_v152';
+    const STORAGE_KEY_WALLET = 'aviator_classic_wallet_v153';
 
-    // Helper: Guaranteed clean numeric formatting to eliminate NaNx errors
+    // Helper: Guaranteed clean numeric formatting
     function safeNum(val, fallback = 1.00) {
       const n = parseFloat(val);
       return (!isNaN(n) && isFinite(n)) ? n : fallback;
@@ -643,7 +684,6 @@
       const fundsModal = document.getElementById('fundsModal');
       const isModalOpen = !fundsModal.classList.contains('hidden');
 
-      // If user is inside funds modal, display toast strictly inside modal container
       const targetContainer = (forceInModal || isModalOpen) 
         ? document.getElementById('modalToastContainer') 
         : document.getElementById('toastContainer');
@@ -922,6 +962,7 @@
       if (betStations[id].state === 'IDLE') {
         document.getElementById(`btnSub${id}`).innerText = `₹${val.toFixed(2)}`;
       }
+      playBeep(800, 0.03);
     }
 
     function setBet(id, amount) {
@@ -931,6 +972,7 @@
       if (betStations[id].state === 'IDLE') {
         document.getElementById(`btnSub${id}`).innerText = `₹${betStations[id].amount.toFixed(2)}`;
       }
+      playBeep(850, 0.03);
     }
 
     function toggleAutoBet(id) {
@@ -1095,7 +1137,7 @@
     }
 
     /* ==============================================================
-       6. CANVAS RENDERING ENGINE (NAN-PROTECTED)
+       6. CANVAS RENDERING ENGINE
     ============================================================== */
     function initCanvasStars() {
       stars.length = 0;
@@ -1169,7 +1211,6 @@
           startFlight();
         }
       } else if (gameState === 'FLYING') {
-        // Safe growth equation preventing negative or non-numeric results
         const rawGrowth = 1.00 + Math.pow(elapsed * 0.35, 1.85) * 0.95;
         currentMultiplier = Math.floor(safeNum(rawGrowth, 1.00) * 100) / 100;
         document.getElementById('multiplierText').innerText = formatMult(currentMultiplier);
@@ -1258,10 +1299,9 @@
     }
 
     /* ==============================================================
-       7. FUNDS MANAGEMENT & DYNAMIC WITHDRAWAL LIMIT CHECKS
+       7. FUNDS MANAGEMENT & WITHDRAW LIMITS
     ============================================================== */
     function openFundsModal() {
-      // Default text boxes are empty when opening funds modal
       document.getElementById('depositAmountInput').value = '';
       document.getElementById('withdrawAmountInput').value = '';
       hideWithdrawLimitHint();
@@ -1301,7 +1341,7 @@
       const amt = parseFloat(rawVal);
 
       if (!rawVal || isNaN(amt) || amt <= 0) {
-        showToast("Please enter an amount to deposit.", "error");
+        showToast("Please enter an amount to deposit.", "error", true);
         return;
       }
       document.getElementById('payableAmountDisplay').innerText = `₹${amt.toLocaleString('en-IN')}.00`;
@@ -1359,11 +1399,10 @@
         document.getElementById('addStep4').classList.remove('hidden');
 
         playCashoutSound();
-        showToast(`Deposit Approved! ₹${amt} added to wallet.`, 'success');
+        showToast(`Deposit Approved! ₹${amt} added to wallet.`, 'success', true);
       }, delay);
     }
 
-    // --- WITHDRAWAL LIMIT CHECKS & REALTIME TEXT HINTS ---
     function handleWithdrawAmountInput() {
       const input = document.getElementById('withdrawAmountInput');
       const hint = document.getElementById('withdrawLimitHint');
@@ -1394,6 +1433,11 @@
     }
 
     function setWithdrawMethod(method) {
+      if (method === 'Amazon') {
+        showToast("Amazon Pay wallet is temporarily unavailable. Please use UPI or NEFT.", "warning", true);
+        return;
+      }
+
       selectedWithdrawMethod = method;
       const cardUPI = document.getElementById('methodCardUPI');
       const cardAmazon = document.getElementById('methodCardAmazon');
@@ -1404,7 +1448,7 @@
       const targetLabel = document.getElementById('withdrawTargetLabel');
       const targetInput = document.getElementById('withdrawTargetInput');
 
-      [cardUPI, cardAmazon, cardNEFT].forEach(card => {
+      [cardUPI, cardNEFT].forEach(card => {
         card.className = "p-2 rounded-xl border border-[#282d42] bg-[#181a26] cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center";
       });
 
@@ -1414,12 +1458,6 @@
         neftFields.classList.add('hidden');
         targetLabel.innerText = "Enter UPI ID (e.g. mobile@upi)";
         targetInput.placeholder = "username@okhdfcbank";
-      } else if (method === 'Amazon') {
-        cardAmazon.className = "p-2 rounded-xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center";
-        simpleField.classList.remove('hidden');
-        neftFields.classList.add('hidden');
-        targetLabel.innerText = "Enter Amazon Pay Mobile Number";
-        targetInput.placeholder = "9876543210";
       } else if (method === 'NEFT') {
         cardNEFT.className = "p-2 rounded-xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center";
         simpleField.classList.add('hidden');
@@ -1432,7 +1470,7 @@
       const amt = parseFloat(inputStr);
 
       if (!inputStr || isNaN(amt)) {
-        showToast("Please enter an amount to withdraw.", "error");
+        showToast("Please enter an amount to withdraw.", "error", true);
         return;
       }
 
@@ -1445,9 +1483,8 @@
         return;
       }
 
-      // ONLY SHOW NOTIFICATION WHEN SUFFICIENT BALANCE IS NOT AVAILABLE
       if (amt > wallet) {
-        showToast("Insufficient balance! Your current wallet balance is not enough to withdraw this amount.", "error");
+        showToast("Insufficient balance! Your current wallet balance is not enough to withdraw this amount.", "error", true);
         return;
       }
 
@@ -1460,33 +1497,33 @@
         const ifsc = document.getElementById('neftIfsc').value.trim().toUpperCase();
 
         if (!payee) {
-          showToast("Please enter payee account name.", "error");
+          showToast("Please enter payee account name.", "error", true);
           return;
         }
         if (!acc || acc.length < 9) {
-          showToast("Please enter a valid bank account number.", "error");
+          showToast("Please enter a valid bank account number.", "error", true);
           return;
         }
         if (acc !== accConfirm) {
-          showToast("Bank account numbers do not match!", "error");
+          showToast("Bank account numbers do not match!", "error", true);
           return;
         }
         if (!ifsc || ifsc.length < 11) {
-          showToast("Please enter a valid 11-character IFSC code.", "error");
+          showToast("Please enter a valid 11-character IFSC code.", "error", true);
           return;
         }
         summaryIdentifier = `A/C: ${acc} (${ifsc}) - ${payee}`;
       } else {
         const target = document.getElementById('withdrawTargetInput').value.trim();
         if (!target) {
-          showToast("Please enter your payout recipient details.", "error");
+          showToast("Please enter your payout recipient details.", "error", true);
           return;
         }
         summaryIdentifier = target;
       }
 
       document.getElementById('reviewAmount').innerText = `₹${amt.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('reviewMethod').innerText = selectedWithdrawMethod === 'NEFT' ? 'NEFT Bank Transfer' : selectedWithdrawMethod === 'UPI' ? 'UPI Transfer' : 'Amazon Pay Wallet';
+      document.getElementById('reviewMethod').innerText = selectedWithdrawMethod === 'NEFT' ? 'NEFT Bank Transfer' : 'UPI Transfer';
       document.getElementById('reviewTarget').innerText = summaryIdentifier;
 
       document.getElementById('withdrawStep1').classList.add('hidden');
@@ -1513,7 +1550,7 @@
       document.getElementById('withdrawStep3').classList.remove('hidden');
 
       playCashoutSound();
-      showToast("Payout transfer queued successfully!", "success");
+      showToast("Payout transfer queued successfully!", "success", true);
     }
 
     /* ==============================================================
@@ -1548,7 +1585,30 @@
     }
 
     /* ==============================================================
-       9. INSTANT BOOTSTRAP
+       9. RIGOROUS MOBILE GESTURE & PINCH/DOUBLE-TAP ZOOM SHIELD
+    ============================================================== */
+    // Prevent double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, { passive: false });
+
+    // Prevent multi-touch gesture zoom (pinch-to-zoom)
+    document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
+    document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
+    document.addEventListener('gestureend', (e) => e.preventDefault(), { passive: false });
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    /* ==============================================================
+       10. INSTANT BOOTSTRAP
     ============================================================== */
     resizeCanvas();
     updateWalletUI();
