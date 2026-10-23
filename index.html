@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Aviator Classic v1.6</title>
+  <title>Aviator Classic v1.62.1</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Aviator Classic">
@@ -176,6 +176,15 @@
       0% { background-color: rgba(16, 185, 129, 0.25); }
       100% { background-color: transparent; }
     }
+
+    /* Row Slide-in Animation for live bets stream */
+    @keyframes slide-in-bet {
+      0% { opacity: 0; transform: translateY(-8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-bet-entry {
+      animation: slide-in-bet 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
   </style>
 </head>
 <body class="bg-[#0b0d13] text-gray-100 flex flex-col min-h-screen relative">
@@ -197,7 +206,7 @@
       <div class="min-w-0 flex flex-col justify-center">
         <div class="flex items-center gap-1.5 flex-wrap">
           <span class="font-black tracking-wider text-white text-sm sm:text-lg italic truncate">AVIATOR <span class="text-red-500 font-extrabold text-xs sm:text-base">CLASSIC</span></span>
-          <span class="text-[9px] sm:text-[10px] bg-red-600/30 text-red-400 font-semibold px-1 py-0.2 rounded border border-red-500/30 flex-shrink-0">v1.6</span>
+          <span class="text-[9px] sm:text-[10px] bg-red-600/30 text-red-400 font-semibold px-1 py-0.2 rounded border border-red-500/30 flex-shrink-0">v1.62.1</span>
         </div>
         <div class="flex items-center gap-1.5 text-[9px] sm:text-xs text-gray-400 truncate">
           <span class="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
@@ -207,7 +216,7 @@
     </div>
 
     <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
-      <div class="bg-[#191b26] border border-[#2b3042] px-2 sm:px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-inner max-w-[135px] sm:max-w-none">
+      <div class="bg-[#191b26] border border-[#2b3042] px-2 sm:px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-inner max-w-[145px] sm:max-w-none">
         <span class="text-gray-400 text-xs sm:text-sm font-semibold">₹</span>
         <span id="walletBalance" class="text-emerald-400 font-bold font-mono-num text-xs sm:text-base tracking-wide truncate">200.00</span>
       </div>
@@ -240,14 +249,14 @@
   <!-- ==================== MAIN GAMEPLAY AREA ==================== -->
   <main class="flex-1 flex flex-col lg:flex-row p-2 sm:p-4 gap-3 max-w-[1700px] w-full mx-auto">
     
-    <!-- LEFT: REALTIME INTERACTIVE LIVE BETS FEED -->
-    <section class="lg:w-72 bg-[#12141c] border border-[#202434] rounded-2xl flex flex-col overflow-hidden max-h-48 lg:max-h-none order-3 lg:order-1 shadow-lg">
+    <!-- LEFT: REALTIME LIVE BETS FEED -->
+    <section class="lg:w-72 bg-[#12141c] border border-[#202434] rounded-2xl flex flex-col overflow-hidden max-h-52 lg:max-h-none order-3 lg:order-1 shadow-lg">
       <div class="px-3 py-2 bg-[#171924] border-b border-[#222638] flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-red-500"></span>
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
           <span class="text-xs font-bold uppercase text-gray-300 tracking-wider">Live Bets</span>
         </div>
-        <span id="feedBetsTotal" class="text-xs font-mono-num text-gray-400">548 Bets</span>
+        <span id="feedBetsTotal" class="text-xs font-mono-num text-emerald-400 font-bold">0 Bets</span>
       </div>
       <div class="text-[10px] grid grid-cols-12 px-3 py-1.5 text-gray-500 border-b border-[#1f2230] font-semibold uppercase">
         <span class="col-span-6">User</span>
@@ -446,103 +455,118 @@
   </main>
 
   <!-- ==================== MANAGE FUNDS MODAL ==================== -->
-  <div id="fundsModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 hidden">
-    <div class="bg-[#141620] border border-[#252a3d] rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[92vh] relative">
+  <div id="fundsModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-gradient-to-b from-[#161824] to-[#10121a] border border-[#2b3046] rounded-3xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[92vh] relative">
       
       <!-- IN-MODAL TOAST NOTIFICATION CONTAINER -->
       <div id="modalToastContainer" class="absolute top-2 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-11/12"></div>
 
       <!-- Modal Header -->
-      <div class="px-5 py-3.5 bg-[#191c28] border-b border-[#25293d] flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-          <h3 class="font-bold text-base text-white tracking-wide">Manage Funds</h3>
+      <div class="px-5 py-4 bg-[#1a1d2c]/80 border-b border-[#262b3e] flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-3 h-3 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></div>
+          <div>
+            <h3 class="font-extrabold text-sm sm:text-base text-white tracking-wide">Manage Funds</h3>
+            <p class="text-[10px] text-gray-400 font-medium">Instant Deposit & 24x7 Bank Payout Hub</p>
+          </div>
         </div>
-        <button onclick="closeFundsModal()" class="w-8 h-8 rounded-lg bg-[#202434] text-gray-400 hover:text-white flex items-center justify-center">✕</button>
+        <button onclick="closeFundsModal()" class="w-8 h-8 rounded-xl bg-[#23283c] text-gray-400 hover:text-white flex items-center justify-center transition border border-white/5 active:scale-95">✕</button>
       </div>
 
       <!-- Tab Switcher -->
-      <div class="grid grid-cols-2 p-2 bg-[#10121a] gap-2 border-b border-[#202436]">
-        <button id="tabBtnAdd" onclick="switchFundsTab('add')" class="py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md">Add Funds</button>
-        <button id="tabBtnWithdraw" onclick="switchFundsTab('withdraw')" class="py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#181a26] text-gray-400 hover:text-white">Withdraw Funds</button>
+      <div class="grid grid-cols-2 p-1.5 bg-[#0f1118] gap-1.5 border-b border-[#212638] mx-3 my-2.5 rounded-2xl">
+        <button id="tabBtnAdd" onclick="switchFundsTab('add')" class="py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md transition-all">Add Funds</button>
+        <button id="tabBtnWithdraw" onclick="switchFundsTab('withdraw')" class="py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-transparent text-gray-400 hover:text-white transition-all">Withdraw Funds</button>
       </div>
 
       <!-- TAB 1: ADD FUNDS -->
       <div id="tabContentAdd" class="p-5 flex-1 overflow-y-auto space-y-4">
-        <div id="addStep1">
-          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Enter Deposit Amount (₹)</label>
-          <div class="flex items-center bg-[#191b26] border border-[#2c3146] rounded-xl px-3 py-2.5 mb-2 focus-within:border-red-500 transition">
-            <span class="text-gray-400 font-bold mr-2">₹</span>
-            <input type="number" id="depositAmountInput" value="" min="10" step="50" class="w-full bg-transparent font-bold font-mono-num text-lg text-white focus:outline-none" placeholder="Enter amount">
+        <div id="addStep1" class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Enter Deposit Amount (₹)</label>
+            <div class="flex items-center bg-[#191c28] border border-[#2b3147] rounded-2xl px-3.5 py-3 focus-within:border-emerald-500 transition shadow-inner">
+              <span class="text-gray-400 font-black text-lg mr-2">₹</span>
+              <!-- Empty by default, no value pre-filled -->
+              <input type="number" id="depositAmountInput" value="" min="10" max="100000" step="50" class="w-full bg-transparent font-bold font-mono-num text-lg text-white focus:outline-none" placeholder="Enter amount">
+            </div>
+            <div class="flex justify-between items-center text-[10px] text-gray-400 mt-1.5 px-0.5">
+              <span>Min: ₹10</span>
+              <span>Max Single Deposit: <strong class="text-emerald-400">₹1,00,000</strong></span>
+            </div>
           </div>
 
-          <div class="grid grid-cols-4 gap-2 mb-4">
-            <button onclick="setDepositAmount(200)" class="bg-[#1b1e2b] hover:bg-[#232738] border border-[#2a2f44] py-1.5 rounded-lg text-xs font-mono-num font-semibold text-gray-200">+₹200</button>
-            <button onclick="setDepositAmount(500)" class="bg-[#1b1e2b] hover:bg-[#232738] border border-[#2a2f44] py-1.5 rounded-lg text-xs font-mono-num font-semibold text-gray-200">+₹500</button>
-            <button onclick="setDepositAmount(1000)" class="bg-[#1b1e2b] hover:bg-[#232738] border border-[#2a2f44] py-1.5 rounded-lg text-xs font-mono-num font-semibold text-gray-200">+₹1,000</button>
-            <button onclick="setDepositAmount(5000)" class="bg-[#1b1e2b] hover:bg-[#232738] border border-[#2a2f44] py-1.5 rounded-lg text-xs font-mono-num font-semibold text-gray-200">+₹5,000</button>
+          <!-- Quick Chips -->
+          <div class="grid grid-cols-4 gap-2">
+            <button onclick="setDepositAmount(200)" class="bg-[#1b1e2c] hover:bg-[#252a3d] border border-[#292f44] py-2 rounded-xl text-xs font-mono-num font-bold text-gray-200 transition active:scale-95">+₹200</button>
+            <button onclick="setDepositAmount(500)" class="bg-[#1b1e2c] hover:bg-[#252a3d] border border-[#292f44] py-2 rounded-xl text-xs font-mono-num font-bold text-gray-200 transition active:scale-95">+₹500</button>
+            <button onclick="setDepositAmount(1000)" class="bg-[#1b1e2c] hover:bg-[#252a3d] border border-[#292f44] py-2 rounded-xl text-xs font-mono-num font-bold text-gray-200 transition active:scale-95">+₹1,000</button>
+            <button onclick="setDepositAmount(5000)" class="bg-[#1b1e2c] hover:bg-[#252a3d] border border-[#292f44] py-2 rounded-xl text-xs font-mono-num font-bold text-gray-200 transition active:scale-95">+₹5,000</button>
           </div>
 
-          <button onclick="goToPaymentMethods()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm shadow-lg shadow-emerald-700/30 transition active:scale-95 flex items-center justify-center gap-2">
+          <button onclick="goToPaymentMethods()" class="w-full py-3.5 mt-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-sm shadow-lg shadow-emerald-700/30 transition active:scale-95 flex items-center justify-center gap-2">
             <span>Proceed to Payment</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
         </div>
 
         <div id="addStep2" class="hidden space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-[#222638]">
-            <span class="text-xs text-gray-400">Total Payable:</span>
-            <span id="payableAmountDisplay" class="text-base font-bold font-mono-num text-emerald-400">₹0.00</span>
+          <div class="flex items-center justify-between pb-2 border-b border-[#222638] px-1">
+            <span class="text-xs text-gray-400 font-semibold">Total Payable:</span>
+            <span id="payableAmountDisplay" class="text-lg font-black font-mono-num text-emerald-400">₹0.00</span>
           </div>
 
-          <div class="text-xs text-gray-400 uppercase font-bold tracking-wider pt-1">Select Payment Method:</div>
+          <div class="text-xs text-gray-400 uppercase font-bold tracking-wider pt-1">Select Payment Gateway:</div>
 
-          <div onclick="selectPaymentProvider('gpay')" class="p-3 bg-[#191c28] hover:bg-[#212536] border border-[#292e42] hover:border-blue-500 rounded-xl flex items-center justify-between cursor-pointer transition">
+          <div onclick="selectPaymentProvider('gpay')" class="p-3 bg-[#191c28] hover:bg-[#222738] border border-[#2b3046] hover:border-blue-500 rounded-2xl flex items-center justify-between cursor-pointer transition shadow-sm">
             <div class="flex items-center gap-3">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQweNJ3RA0kUHW9BGg0dCuAAPJ0XlEtxO7WMmh9gu9PwXDrQcoocny_0pc&s=10" class="w-9 h-9 rounded-lg object-contain bg-white p-1 shadow" alt="GPay">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQweNJ3RA0kUHW9BGg0dCuAAPJ0XlEtxO7WMmh9gu9PwXDrQcoocny_0pc&s=10" class="w-9 h-9 rounded-xl object-contain bg-white p-1 shadow" alt="GPay">
               <div>
                 <div class="font-bold text-sm text-white">Google Pay</div>
-                <div class="text-[11px] text-gray-400">Instant UPI Direct</div>
+                <div class="text-[11px] text-gray-400">Instant UPI Direct Link</div>
               </div>
             </div>
-            <span class="text-xs text-blue-400 font-semibold">Pay Now →</span>
+            <span class="text-xs text-blue-400 font-bold">Pay Now →</span>
           </div>
 
-          <div onclick="selectPaymentProvider('paytm')" class="p-3 bg-[#191c28] hover:bg-[#212536] border border-[#292e42] hover:border-cyan-500 rounded-xl flex items-center justify-between cursor-pointer transition">
+          <div onclick="selectPaymentProvider('paytm')" class="relative p-3 bg-[#161822] border border-gray-700/60 rounded-2xl flex items-center justify-between cursor-not-allowed transition opacity-75 shadow-sm">
+            <span class="absolute -top-1.5 right-3 bg-amber-500 text-black font-extrabold text-[8px] px-2 py-0.5 rounded-full uppercase shadow">Temporarily Unavailable</span>
             <div class="flex items-center gap-3">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/Paytm_logo.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original" class="w-9 h-9 rounded-lg object-cover bg-white p-0.5 shadow" alt="Paytm">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/Paytm_logo.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original" class="w-9 h-9 rounded-xl object-cover bg-white p-0.5 grayscale shadow" alt="Paytm">
               <div>
-                <div class="font-bold text-sm text-white">Paytm UPI</div>
-                <div class="text-[11px] text-gray-400">Fast Bank UPI / Wallet</div>
+                <div class="font-bold text-sm text-gray-400">Paytm UPI</div>
+                <div class="text-[11px] text-gray-500">Node under scheduled maintenance</div>
               </div>
             </div>
-            <span class="text-xs text-cyan-400 font-semibold">Pay Now →</span>
+            <span class="text-xs text-gray-500 font-semibold">Offline</span>
           </div>
 
-          <div onclick="selectPaymentProvider('scan')" class="p-3 bg-[#191c28] hover:bg-[#212536] border border-[#292e42] hover:border-amber-500 rounded-xl flex items-center justify-between cursor-pointer transition">
+          <div onclick="selectPaymentProvider('scan')" class="p-3 bg-[#191c28] hover:bg-[#222738] border border-[#2b3046] hover:border-amber-500 rounded-2xl flex items-center justify-between cursor-pointer transition shadow-sm">
             <div class="flex items-center gap-3">
-              <img src="https://dayschedule.com/tools/upi-qr-generator" class="w-9 h-9 rounded-lg object-contain bg-white p-1 shadow" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=upi'" alt="UPI Scan">
+              <img src="https://dayschedule.com/tools/upi-qr-generator" class="w-9 h-9 rounded-xl object-contain bg-white p-1 shadow" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=upi'" alt="UPI Scan">
               <div>
                 <div class="font-bold text-sm text-white">Scan UPI QR Code</div>
-                <div class="text-[11px] text-gray-400">Any UPI app (BHIM, PhonePe, etc.)</div>
+                <div class="text-[11px] text-gray-400">BHIM, PhonePe, Cred, Any UPI App</div>
               </div>
             </div>
-            <span class="text-xs text-amber-400 font-semibold">Show QR →</span>
+            <span class="text-xs text-amber-400 font-bold">Show QR →</span>
           </div>
 
-          <button onclick="backToAddStep1()" class="w-full text-center text-xs text-gray-400 hover:text-white py-1">← Change Amount</button>
+          <button onclick="backToAddStep1()" class="w-full text-center text-xs text-gray-400 hover:text-white py-1 transition font-medium">← Change Amount</button>
         </div>
 
         <div id="addStep3" class="hidden flex flex-col items-center text-center py-2 space-y-3">
-          <div id="qrCodeContainer" class="p-3 bg-white rounded-2xl shadow-xl inline-block">
-            <img id="dynamicQrImage" src="" alt="Payment QR" class="w-40 h-40 object-contain">
+          <div class="p-3 bg-white rounded-2xl shadow-xl inline-block border-2 border-emerald-500/40">
+            <img id="dynamicQrImage" src="" alt="Payment QR" class="w-44 h-44 object-contain">
           </div>
-          <div class="text-xs font-mono-num text-gray-300">
-            UPI VPA: <span class="text-amber-400 font-bold select-all">lilaanas6-3@okicici</span>
+          
+          <div class="bg-[#1b1f2e] border border-amber-500/40 rounded-xl px-4 py-2 w-full text-center">
+            <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Payment Acceptance Account</div>
+            <div class="text-sm font-extrabold text-amber-300 tracking-wide mt-0.5">Aviator Classic Games</div>
           </div>
-          <p class="text-xs text-gray-400">Complete payment in your app for <strong id="verifyAmtText" class="text-white">₹500.00</strong>, then tap below to verify and credit your wallet.</p>
 
-          <button id="verifyPaymentBtn" onclick="verifyDepositPayment()" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-700/30 transition flex items-center justify-center gap-2">
+          <p class="text-xs text-gray-300">Complete payment in your app for <strong id="verifyAmtText" class="text-emerald-400 font-mono-num font-bold">₹500.00</strong>, then tap below to verify and credit your wallet.</p>
+
+          <button id="verifyPaymentBtn" onclick="verifyDepositPayment()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-sm shadow-lg shadow-indigo-700/30 transition flex items-center justify-center gap-2 active:scale-95">
             <span id="verifyBtnSpinner" class="hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
             <span id="verifyBtnLabel">Verify Payment</span>
           </button>
@@ -552,7 +576,7 @@
           <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-3xl font-black shadow-lg">✓</div>
           <h4 class="text-lg font-bold text-white">Payment Approved!</h4>
           <p id="approvedSuccessMsg" class="text-xs text-gray-300">₹500.00 has been credited successfully to your Aviator wallet.</p>
-          <button onclick="closeFundsModal()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider">Back to Game</button>
+          <button onclick="closeFundsModal()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition active:scale-95 shadow-md">Back to Game</button>
         </div>
       </div>
 
@@ -560,35 +584,36 @@
       <div id="tabContentWithdraw" class="p-5 flex-1 overflow-y-auto space-y-4 hidden">
         <div id="withdrawStep1" class="space-y-3.5">
           <div>
-            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Withdrawal Amount (₹)</label>
-            <div class="flex items-center bg-[#191b26] border border-[#2c3146] rounded-xl px-3 py-2.5 focus-within:border-red-500 transition">
-              <span class="text-gray-400 font-bold mr-2">₹</span>
-              <input type="number" id="withdrawAmountInput" value="" min="1000" max="10000" step="100" oninput="handleWithdrawAmountInput()" class="w-full bg-transparent font-bold font-mono-num text-lg text-white focus:outline-none" placeholder="Enter amount">
+            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Withdrawal Amount (₹)</label>
+            <div class="flex items-center bg-[#191c28] border border-[#2b3147] rounded-2xl px-3.5 py-3 focus-within:border-red-500 transition shadow-inner">
+              <span class="text-gray-400 font-black text-lg mr-2">₹</span>
+              <!-- Empty by default, placeholder only -->
+              <input type="number" id="withdrawAmountInput" value="" min="1000" max="100000" step="100" oninput="handleWithdrawAmountInput()" class="w-full bg-transparent font-bold font-mono-num text-lg text-white focus:outline-none" placeholder="Enter amount">
             </div>
             
             <div id="withdrawLimitHint" class="text-[11px] font-semibold mt-1.5 hidden"></div>
 
-            <div class="flex justify-between items-center text-[10px] text-gray-400 mt-1">
-              <span>Min: ₹1,000 | Max Daily: ₹10,000</span>
+            <div class="flex justify-between items-center text-[10px] text-gray-400 mt-1.5 px-0.5">
+              <span>Min: ₹1,000 | Daily Limit: <strong class="text-amber-400">₹1,00,000</strong></span>
               <span>Available: <strong class="text-emerald-400" id="availWithdrawBal">₹200.00</strong></span>
             </div>
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Select Payout Method</label>
+            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">Select Payout Method</label>
             <div class="grid grid-cols-3 gap-2">
-              <div id="methodCardUPI" onclick="setWithdrawMethod('UPI')" class="p-2 rounded-xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center">
+              <div id="methodCardUPI" onclick="setWithdrawMethod('UPI')" class="p-2.5 rounded-2xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center shadow-sm">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDpQ1oOgqV-At8wx8eMbo9sqrMz34hVIRF7cQZiAyGSA&s=10" class="w-6 h-6 rounded object-contain bg-white p-0.5" alt="UPI">
                 <span class="text-[11px] font-bold text-white">UPI ID</span>
               </div>
 
-              <div id="methodCardAmazon" onclick="setWithdrawMethod('Amazon')" class="relative p-2 rounded-xl border border-gray-700/60 bg-[#161822] cursor-not-allowed flex flex-col items-center justify-center gap-1.5 transition text-center opacity-75">
+              <div id="methodCardAmazon" onclick="setWithdrawMethod('Amazon')" class="relative p-2.5 rounded-2xl border border-gray-700/60 bg-[#161822] cursor-not-allowed flex flex-col items-center justify-center gap-1.5 transition text-center opacity-75 shadow-sm">
                 <span class="absolute -top-1.5 -right-1 bg-amber-500 text-black font-extrabold text-[8px] px-1.5 py-0.2 rounded-full uppercase shadow">Offline</span>
                 <img src="https://www.talkandroid.com/wp-content/uploads/2014/07/amazon_wallet_app_icon.png" class="w-6 h-6 rounded object-cover bg-white p-0.5 grayscale" alt="Amazon">
                 <span class="text-[10px] font-bold text-gray-400">Amazon Pay</span>
               </div>
 
-              <div id="methodCardNEFT" onclick="setWithdrawMethod('NEFT')" class="p-2 rounded-xl border border-[#282d42] bg-[#181a26] cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center">
+              <div id="methodCardNEFT" onclick="setWithdrawMethod('NEFT')" class="p-2.5 rounded-2xl border border-[#2b3046] bg-[#191c28] cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center shadow-sm">
                 <img src="https://suncrypto.in/assetsnew/img/neft.png" class="w-6 h-6 rounded object-contain bg-white p-0.5" alt="NEFT Bank">
                 <span class="text-[11px] font-bold text-white">NEFT Bank</span>
               </div>
@@ -597,7 +622,7 @@
 
           <div id="simplePayoutField">
             <label id="withdrawTargetLabel" class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Enter UPI ID (e.g. mobile@upi)</label>
-            <input type="text" id="withdrawTargetInput" placeholder="username@okhdfcbank" class="w-full bg-[#191b26] border border-[#2c3146] rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500 font-mono">
+            <input type="text" id="withdrawTargetInput" placeholder="username@okhdfcbank" class="w-full bg-[#191b26] border border-[#2c3146] rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 font-mono">
           </div>
 
           <div id="neftPayoutFields" class="hidden space-y-2">
@@ -624,7 +649,7 @@
             <span><strong>Note:</strong> Transfer might take approx <strong>2–4 working hrs</strong> to reflect in your bank account or wallet.</span>
           </div>
 
-          <button onclick="reviewWithdrawal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold text-sm shadow-lg shadow-red-700/30 transition active:scale-95">
+          <button onclick="reviewWithdrawal()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-extrabold text-sm shadow-lg shadow-red-700/30 transition active:scale-95">
             Proceed to Review
           </button>
         </div>
@@ -635,10 +660,10 @@
             <p class="text-[11px] text-gray-400">Please verify your transfer details carefully.</p>
           </div>
 
-          <div class="bg-[#181a26] border border-[#262a3d] rounded-xl p-3.5 space-y-2 text-xs">
+          <div class="bg-[#181a26] border border-[#262a3d] rounded-2xl p-4 space-y-2 text-xs shadow-inner">
             <div class="flex justify-between py-1 border-b border-[#202334]">
               <span class="text-gray-400">Withdrawal Amount:</span>
-              <span id="reviewAmount" class="font-bold font-mono-num text-emerald-400 text-sm">₹0.00</span>
+              <span id="reviewAmount" class="font-black font-mono-num text-emerald-400 text-sm">₹0.00</span>
             </div>
             <div class="flex justify-between py-1 border-b border-[#202334]">
               <span class="text-gray-400">Transfer Method:</span>
@@ -655,8 +680,8 @@
           </div>
 
           <div class="grid grid-cols-2 gap-2 pt-2">
-            <button onclick="backToWithdrawStep1()" class="py-2.5 rounded-xl bg-[#202434] text-gray-300 hover:text-white text-xs font-bold">Edit Details</button>
-            <button onclick="confirmWithdrawal()" class="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-700/25">Confirm & Submit</button>
+            <button onclick="backToWithdrawStep1()" class="py-3 rounded-2xl bg-[#202434] text-gray-300 hover:text-white text-xs font-bold transition">Edit Details</button>
+            <button onclick="confirmWithdrawal()" class="py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-700/25 transition">Confirm & Submit</button>
           </div>
         </div>
 
@@ -666,13 +691,13 @@
           </div>
           <h4 class="text-lg font-bold text-white">Payment Transfer Placed!</h4>
           <p class="text-xs text-gray-300 px-4">
-            Your withdrawal request for <strong id="successWithdrawAmt" class="text-emerald-400">₹0.00</strong> has been queued successfully.
+            Your withdrawal request for <strong id="successWithdrawAmt" class="text-emerald-400 font-mono-num font-bold">₹0.00</strong> has been queued successfully.
           </p>
-          <div class="p-2.5 bg-[#171926] rounded-xl border border-[#272b3e] text-[11px] text-gray-400 w-full">
+          <div class="p-3 bg-[#171926] rounded-2xl border border-[#272b3e] text-[11px] text-gray-400 w-full shadow-inner">
             Transfer Reference: <span class="font-mono text-gray-200 font-bold" id="payoutRefId">AVTR-8924190</span><br>
             Expected within <strong>2–4 working hours</strong>.
           </div>
-          <button onclick="closeFundsModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold text-xs uppercase tracking-wider">Done</button>
+          <button onclick="closeFundsModal()" class="w-full py-3 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold text-xs uppercase tracking-wider transition active:scale-95 shadow-md">Done</button>
         </div>
       </div>
 
@@ -686,7 +711,7 @@
     ============================================================== */
     const PLANE_SPRITE_URL = 'https://i.postimg.cc/kg5zXw0y/image.png';
     const UPI_VPA = 'lilaanas6-3@okicici';
-    const STORAGE_KEY_WALLET = 'aviator_classic_wallet_v160';
+    const STORAGE_KEY_WALLET = 'aviator_classic_wallet_v162';
 
     function safeNum(val, fallback = 1.00) {
       const n = parseFloat(val);
@@ -941,8 +966,8 @@
         }
       });
 
-      // Prepare fresh round of live simulated bets
-      initRoundSimulatedBets();
+      // Natural wave/burst bets streaming
+      startCountdownGradualBets();
     }
 
     function startFlight() {
@@ -963,6 +988,7 @@
         updateStationUI(id);
       });
 
+      renderLiveBetsDom();
       startEngineSound();
     }
 
@@ -975,16 +1001,22 @@
       document.getElementById('crashedOverlay').classList.remove('hidden');
       document.getElementById('finalCrashMultiplier').innerText = `@ ${formatMult(crashMultiplier)}`;
 
+      // RESOLVE USER'S OWN UN-CASHED ACTIVE BETS -> MARK CRASHED (NOT WAITING)
       [1, 2].forEach(id => {
         if (betStations[id].state === 'ACTIVE') {
           betStations[id].state = 'CRASHED';
         }
         updateStationUI(id);
+
+        const myStatusElem = document.getElementById(`my_bet_station_${id}_status`);
+        if (myStatusElem) {
+          if (betStations[id].state === 'CRASHED') {
+            myStatusElem.innerHTML = `<span class="text-red-500 font-bold font-mono text-[10px]">Crashed</span>`;
+          }
+        }
       });
 
-      // Mark uncashed simulated bets as lost/crashed
       resolveSimulatedLosses();
-
       addHistoryPill(crashMultiplier);
 
       setTimeout(() => {
@@ -1104,6 +1136,8 @@
       betStations[id].state = 'QUEUED';
       updateStationUI(id);
       playBeep(520, 0.06);
+
+      renderLiveBetsDom();
     }
 
     function cancelQueuedBet(id) {
@@ -1113,6 +1147,8 @@
       betStations[id].state = 'IDLE';
       updateStationUI(id);
       showToast("Bet cancelled.", "info");
+
+      renderLiveBetsDom();
     }
 
     function cashoutBet(id) {
@@ -1132,6 +1168,11 @@
       updateStationUI(id);
       playCashoutSound();
       showToast(`Cashed out @ ${formatMult(mult)}! Won ₹${winnings.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 'success');
+
+      const youStatus = document.getElementById(`my_bet_station_${id}_status`);
+      if (youStatus) {
+        youStatus.innerHTML = `<span class="text-amber-400 font-bold font-mono">${mult.toFixed(2)}x</span>`;
+      }
     }
 
     function checkAutoCashouts() {
@@ -1373,6 +1414,7 @@
        7. FUNDS MANAGEMENT & WITHDRAW LIMITS
     ============================================================== */
     function openFundsModal() {
+      // Inputs remain clean & completely empty on open
       document.getElementById('depositAmountInput').value = '';
       document.getElementById('withdrawAmountInput').value = '';
       hideWithdrawLimitHint();
@@ -1395,11 +1437,11 @@
       const btnAdd = document.getElementById('tabBtnAdd');
       const btnWithdraw = document.getElementById('tabBtnWithdraw');
       if (isAdd) {
-        btnAdd.className = "py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md";
-        btnWithdraw.className = "py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#181a26] text-gray-400 hover:text-white";
+        btnAdd.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md transition-all";
+        btnWithdraw.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-transparent text-gray-400 hover:text-white transition-all";
       } else {
-        btnWithdraw.className = "py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md";
-        btnAdd.className = "py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#181a26] text-gray-400 hover:text-white";
+        btnWithdraw.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md transition-all";
+        btnAdd.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-transparent text-gray-400 hover:text-white transition-all";
       }
     }
 
@@ -1413,6 +1455,10 @@
 
       if (!rawVal || isNaN(amt) || amt <= 0) {
         showToast("Please enter an amount to deposit.", "error", true);
+        return;
+      }
+      if (amt > 100000) {
+        showToast("Maximum single deposit limit is ₹1,00,000.", "error", true);
         return;
       }
       document.getElementById('payableAmountDisplay').innerText = `₹${amt.toLocaleString('en-IN')}.00`;
@@ -1430,17 +1476,22 @@
     }
 
     function selectPaymentProvider(provider) {
-      const amt = safeNum(document.getElementById('depositAmountInput').value, 500);
-      const upiUrl = `upi://pay?pa=${UPI_VPA}&pn=AviatorClassic&am=${amt}&cu=INR&tn=AviatorDeposit`;
+      if (provider === 'paytm') {
+        showToast("Paytm UPI redirect is temporarily unavailable. Please use Google Pay or Scan QR.", "warning", true);
+        return;
+      }
 
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUrl)}`;
+      const amt = safeNum(document.getElementById('depositAmountInput').value, 500);
+      const upiUrl = `upi://pay?pa=${UPI_VPA}&pn=AviatorClassicGames&am=${amt}&cu=INR&tn=AviatorDeposit`;
+
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(upiUrl)}`;
       document.getElementById('dynamicQrImage').src = qrApiUrl;
       document.getElementById('verifyAmtText').innerText = `₹${amt.toFixed(2)}`;
 
       document.getElementById('addStep2').classList.add('hidden');
       document.getElementById('addStep3').classList.remove('hidden');
 
-      if (provider === 'gpay' || provider === 'paytm') {
+      if (provider === 'gpay') {
         window.location.href = upiUrl;
       }
     }
@@ -1489,8 +1540,8 @@
       if (val < 1000) {
         hint.innerText = "Minimum withdrawal limit is ₹1,000";
         hint.className = "text-[11px] font-semibold text-amber-400 mt-1.5 block";
-      } else if (val > 10000) {
-        hint.innerText = "Maximum single withdrawal limit is ₹10,000";
+      } else if (val > 100000) {
+        hint.innerText = "Maximum single withdrawal limit is ₹1,00,000";
         hint.className = "text-[11px] font-semibold text-rose-400 mt-1.5 block";
       } else {
         hideWithdrawLimitHint();
@@ -1520,17 +1571,17 @@
       const targetInput = document.getElementById('withdrawTargetInput');
 
       [cardUPI, cardNEFT].forEach(card => {
-        card.className = "p-2 rounded-xl border border-[#282d42] bg-[#181a26] cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center";
+        card.className = "p-2.5 rounded-2xl border border-[#2b3046] bg-[#191c28] cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center shadow-sm";
       });
 
       if (method === 'UPI') {
-        cardUPI.className = "p-2 rounded-xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center";
+        cardUPI.className = "p-2.5 rounded-2xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center shadow-sm";
         simpleField.classList.remove('hidden');
         neftFields.classList.add('hidden');
         targetLabel.innerText = "Enter UPI ID (e.g. mobile@upi)";
         targetInput.placeholder = "username@okhdfcbank";
       } else if (method === 'NEFT') {
-        cardNEFT.className = "p-2 rounded-xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center";
+        cardNEFT.className = "p-2.5 rounded-2xl border border-red-500/80 bg-red-600/10 cursor-pointer flex flex-col items-center justify-center gap-1.5 transition text-center shadow-sm";
         simpleField.classList.add('hidden');
         neftFields.classList.remove('hidden');
       }
@@ -1549,7 +1600,7 @@
         handleWithdrawAmountInput();
         return;
       }
-      if (amt > 10000) {
+      if (amt > 100000) {
         handleWithdrawAmountInput();
         return;
       }
@@ -1625,9 +1676,8 @@
     }
 
     /* ==============================================================
-       8. AUTHENTIC LIVE MULTIPLAYER ENGINE & REALTIME INTERACTION
+       8. AUTHENTIC MULTIPLAYER STREAM (IRREGULAR BURSTS & STAKES)
     ============================================================== */
-    // 96% Real Indian & Global Authentic Handles
     const realNamesList = [
       'Rahul_Verma', 'Aarav_Sharma', 'Pooja_Patel', 'Amit_Kumar', 'Rohan_Mehta',
       'Neha_Singh', 'Vikram_Rathore', 'Deepak_Gupta', 'Ananya_Iyer', 'Sanjay_Yadav',
@@ -1641,7 +1691,6 @@
       'Dev_Patel', 'Prateek_Kuhad', 'Richa_Chadha', 'Ayushmann_K', 'Radhika_Apte'
     ];
 
-    // 4% Gimmick / Fun Handles
     const gimmickNamesList = [
       'Kalyug_Ka_God', 'Mr_Lootera', 'Rockets_Pilot', 'Noob_Master_69',
       'Chai_Garam', 'Paisa_Double', 'Bhai_Ka_Lover', 'Loss_King_99'
@@ -1657,51 +1706,180 @@
       return `${base}_${suffix}`;
     }
 
-    let activeLiveBets = [];
-
-    // Pre-calculate randomized realistic stakes
+    // 60% round-off figures, 40% irregular arbitrary amounts (e.g. 102, 24, 44, 55.60)
     function getRandomStake() {
-      const r = Math.random();
-      if (r < 0.40) return [20, 50, 100][Math.floor(Math.random() * 3)];
-      if (r < 0.75) return [150, 200, 300, 500][Math.floor(Math.random() * 4)];
-      if (r < 0.93) return [800, 1000, 1500, 2000][Math.floor(Math.random() * 4)];
-      return [3000, 5000, 10000][Math.floor(Math.random() * 3)];
+      const isRound = Math.random() < 0.60;
+      if (isRound) {
+        const roundPicks = [20, 50, 100, 150, 200, 300, 500, 1000, 2000, 5000];
+        return roundPicks[Math.floor(Math.random() * roundPicks.length)];
+      } else {
+        const irregularType = Math.random();
+        if (irregularType < 0.25) {
+          // Odd integers like 24, 44, 102, 335
+          return Math.floor(Math.random() * 450 + 18);
+        } else if (irregularType < 0.50) {
+          // Precise fractional cents like 55.60, 42.50
+          const intPart = Math.floor(Math.random() * 150 + 20);
+          const decPart = [20, 40, 50, 60, 80][Math.floor(Math.random() * 5)];
+          return parseFloat(`${intPart}.${decPart}`);
+        } else {
+          // Non-round mid amounts like 73, 114, 265, 870
+          const bases = [73, 85, 114, 128, 235, 345, 675, 1250];
+          return bases[Math.floor(Math.random() * bases.length)];
+        }
+      }
     }
 
-    function initRoundSimulatedBets() {
+    let activeLiveBets = [];
+    let gradualBetTimer = null;
+
+    // Irregular natural bursts: 3 in 3ms, pause 1s, 1-10 slide in, pause 0.5s, 2-5 slide in
+    function startCountdownGradualBets() {
+      if (gradualBetTimer) clearTimeout(gradualBetTimer);
       activeLiveBets = [];
-      const totalCount = Math.floor(Math.random() * 15) + 18; // 18 to 32 visible active players
+      renderLiveBetsDom();
 
-      for (let i = 0; i < totalCount; i++) {
-        // Cashout plan: 60% chance user aims for low/mid multiplier (1.10x to 4.50x), 40% will crash/lose
-        const willAttemptCashout = Math.random() < 0.65;
-        const targetMultiplier = willAttemptCashout 
-          ? Math.floor((Math.random() * 3.5 + 1.15) * 100) / 100 
-          : 999.0; // High unreachable target means they will lose when crash happens
+      const targetCount = Math.floor(Math.random() * (102 - 22 + 1)) + 22;
+      let addedCount = 0;
 
-        activeLiveBets.push({
-          id: `sim_bet_${i}_${Date.now()}`,
-          user: getRandomUsername(),
-          stake: getRandomStake(),
-          targetMultiplier: targetMultiplier,
-          cashedOut: false,
-          cashedOutAt: 0,
-          status: 'IN_PLAY' // 'IN_PLAY', 'CASHED', 'LOST'
-        });
+      function triggerBurstWave() {
+        if (gameState !== 'COUNTDOWN' || addedCount >= targetCount) return;
+
+        // Choose random burst size: 1 to 8 users (e.g., 3 rapid drops, or 5 drops)
+        const burstSize = Math.min(targetCount - addedCount, Math.floor(Math.random() * 7) + 1);
+        let dropIndex = 0;
+
+        function dropUserRapidly() {
+          if (gameState !== 'COUNTDOWN' || addedCount >= targetCount || dropIndex >= burstSize) {
+            // After burst completes, pause with irregular natural delays
+            scheduleNextBurstPause();
+            return;
+          }
+
+          const willAttemptCashout = Math.random() < 0.65;
+          const targetMultiplier = willAttemptCashout 
+            ? Math.floor((Math.random() * 3.5 + 1.15) * 100) / 100 
+            : 999.0;
+
+          const newBet = {
+            id: `sim_bet_${addedCount}_${Date.now()}`,
+            user: getRandomUsername(),
+            stake: getRandomStake(),
+            targetMultiplier: targetMultiplier,
+            cashedOut: false,
+            cashedOutAt: 0,
+            status: 'IN_PLAY'
+          };
+
+          activeLiveBets.unshift(newBet);
+          addedCount++;
+          dropIndex++;
+          appendSingleBetDom(newBet);
+
+          // Micro gap inside burst (3ms to 35ms)
+          const microDelay = Math.floor(Math.random() * 32) + 3;
+          gradualBetTimer = setTimeout(dropUserRapidly, microDelay);
+        }
+
+        dropUserRapidly();
       }
 
-      renderLiveBetsDom();
+      function scheduleNextBurstPause() {
+        if (gameState !== 'COUNTDOWN' || addedCount >= targetCount) return;
+
+        // Random wait intervals: sometimes 800ms-1200ms (~1s), sometimes 350ms-600ms (~0.5s), or quick 150ms
+        const r = Math.random();
+        let pauseTime = 400;
+        if (r < 0.40) {
+          pauseTime = Math.floor(Math.random() * 400) + 800; // ~1.0s
+        } else if (r < 0.75) {
+          pauseTime = Math.floor(Math.random() * 250) + 350; // ~0.5s
+        } else {
+          pauseTime = Math.floor(Math.random() * 150) + 120; // ~0.2s
+        }
+
+        gradualBetTimer = setTimeout(triggerBurstWave, pauseTime);
+      }
+
+      // Initial kickoff burst
+      triggerBurstWave();
+    }
+
+    function appendSingleBetDom(bet) {
+      const feed = document.getElementById('liveBetsList');
+      if (!feed) return;
+
+      const row = document.createElement('div');
+      row.id = bet.id;
+      row.className = "grid grid-cols-12 px-2 py-1.5 items-center hover:bg-[#1a1c28] transition rounded animate-bet-entry simulated-bet-row";
+
+      const formattedStake = typeof bet.stake === 'number' && bet.stake % 1 !== 0 
+        ? bet.stake.toFixed(2) 
+        : bet.stake;
+
+      row.innerHTML = `
+        <span class="col-span-6 text-gray-300 truncate font-sans text-[11px] font-medium">${bet.user}</span>
+        <span class="col-span-3 text-right text-gray-400 font-mono">₹${formattedStake}</span>
+        <span class="col-span-3 text-right font-mono" id="${bet.id}_status"><span class="text-gray-500 font-mono">-</span></span>
+      `;
+
+      const firstSimulatedRow = feed.querySelector('.simulated-bet-row');
+      if (firstSimulatedRow) {
+        feed.insertBefore(row, firstSimulatedRow);
+      } else {
+        feed.appendChild(row);
+      }
+
+      let myBetsActiveCount = 0;
+      if (betStations[1].state === 'QUEUED' || betStations[1].state === 'ACTIVE') myBetsActiveCount++;
+      if (betStations[2].state === 'QUEUED' || betStations[2].state === 'ACTIVE') myBetsActiveCount++;
+
+      document.getElementById('feedBetsTotal').innerText = `${activeLiveBets.length + myBetsActiveCount} Bets`;
     }
 
     function renderLiveBetsDom() {
       const feed = document.getElementById('liveBetsList');
+      if (!feed) return;
       feed.innerHTML = '';
-      document.getElementById('feedBetsTotal').innerText = `${activeLiveBets.length} Bets`;
 
+      let myActiveCount = 0;
+
+      // 1. HIGHLIGHT MY BETS AT TOP WITH "YOU" INDICATION
+      [1, 2].forEach(id => {
+        const station = betStations[id];
+        if (station.state === 'QUEUED' || station.state === 'ACTIVE' || station.state === 'CASHED_OUT' || station.state === 'CRASHED') {
+          myActiveCount++;
+          const youRow = document.createElement('div');
+          youRow.id = `my_bet_station_${id}`;
+          youRow.className = "grid grid-cols-12 px-2.5 py-2 items-center bg-emerald-950/40 border border-emerald-500/40 rounded-xl mb-1 shadow-sm";
+
+          let youStatus = `<span class="text-amber-400 font-mono font-bold animate-pulse">Waiting</span>`;
+          if (station.state === 'ACTIVE') {
+            youStatus = `<span class="text-emerald-400 font-mono font-bold">In Play</span>`;
+          } else if (station.state === 'CASHED_OUT') {
+            youStatus = `<span class="text-amber-400 font-bold font-mono">${station.cashedOutAt.toFixed(2)}x</span>`;
+          } else if (station.state === 'CRASHED') {
+            // FIXED: If crashed, it now properly shows Crashed in red, never "waiting"
+            youStatus = `<span class="text-red-500 font-bold font-mono text-[10px]">Crashed</span>`;
+          }
+
+          youRow.innerHTML = `
+            <div class="col-span-6 flex items-center gap-1.5 min-w-0">
+              <span class="bg-emerald-500 text-black text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider flex-shrink-0">YOU</span>
+              <span class="text-emerald-300 font-bold text-[11px] truncate">Bet ${id}</span>
+            </div>
+            <span class="col-span-3 text-right text-emerald-200 font-mono font-bold">₹${station.amount.toFixed(0)}</span>
+            <span class="col-span-3 text-right font-mono" id="my_bet_station_${id}_status">${youStatus}</span>
+          `;
+          feed.appendChild(youRow);
+        }
+      });
+
+      // 2. Simulated Players Rows
       activeLiveBets.forEach(bet => {
         const row = document.createElement('div');
         row.id = bet.id;
-        row.className = "grid grid-cols-12 px-2 py-1.5 items-center hover:bg-[#1a1c28] transition rounded";
+        row.className = "grid grid-cols-12 px-2 py-1.5 items-center hover:bg-[#1a1c28] transition rounded simulated-bet-row";
 
         let statusHtml = `<span class="text-gray-500 font-mono">-</span>`;
         if (bet.status === 'CASHED') {
@@ -1710,16 +1888,21 @@
           statusHtml = `<span class="text-red-500 font-bold font-mono text-[10px]">Crashed</span>`;
         }
 
+        const formattedStake = typeof bet.stake === 'number' && bet.stake % 1 !== 0 
+          ? bet.stake.toFixed(2) 
+          : bet.stake;
+
         row.innerHTML = `
           <span class="col-span-6 text-gray-300 truncate font-sans text-[11px] font-medium">${bet.user}</span>
-          <span class="col-span-3 text-right text-gray-400 font-mono">₹${bet.stake}</span>
+          <span class="col-span-3 text-right text-gray-400 font-mono">₹${formattedStake}</span>
           <span class="col-span-3 text-right font-mono" id="${bet.id}_status">${statusHtml}</span>
         `;
         feed.appendChild(row);
       });
+
+      document.getElementById('feedBetsTotal').innerText = `${activeLiveBets.length + myActiveCount} Bets`;
     }
 
-    // Real-time interactive ticker during flight: People cash out dynamically as multiplier climbs!
     function updateSimulatedBetsInFlight(currentMult) {
       activeLiveBets.forEach(bet => {
         if (bet.status === 'IN_PLAY' && currentMult >= bet.targetMultiplier) {
@@ -1739,7 +1922,6 @@
       });
     }
 
-    // When airplane crashes, anyone who hasn't cashed out is marked as Lost/Crashed
     function resolveSimulatedLosses() {
       activeLiveBets.forEach(bet => {
         if (bet.status === 'IN_PLAY') {
@@ -1755,15 +1937,10 @@
     /* ==============================================================
        9. REALTIME CLOCK-BASED ONLINE USERS COUNTER (1 to 10,00,000)
     ============================================================== */
-    // Returns a base online player volume tuned to the time of day (1 to 10,00,000)
     function getTimeBasedBaseUsers() {
       const now = new Date();
-      const hour = now.getHours(); // 0 to 23
+      const hour = now.getHours();
 
-      // Peak gaming hours in India: 7:00 PM to 12:00 AM (400k - 850k)
-      // Afternoon: 12:00 PM to 6:00 PM (250k - 500k)
-      // Morning: 7:00 AM to 11:00 AM (80k - 250k)
-      // Late Night: 2:00 AM to 6:00 AM (15k - 80k)
       let base = 250000;
       if (hour >= 19 && hour <= 23) {
         base = 650000;
@@ -1779,10 +1956,9 @@
 
     let currentOnlineUsers = getTimeBasedBaseUsers();
 
-    // Natural 2% to 5% smooth jitter every second, strictly clamped between 1 and 10,00,000
     function updateOnlineUsersTicker() {
-      const percentJitter = (Math.random() * 0.03 + 0.02); // 0.02 (2%) to 0.05 (5%)
-      const isUp = Math.random() > 0.48; // balanced up/down oscillation
+      const percentJitter = (Math.random() * 0.03 + 0.02); // 2% to 5%
+      const isUp = Math.random() > 0.48;
       const delta = Math.floor(currentOnlineUsers * percentJitter);
 
       if (isUp) {
@@ -1791,7 +1967,6 @@
         currentOnlineUsers -= delta;
       }
 
-      // Hard clamp bounds: between 1 and 10,00,000
       currentOnlineUsers = Math.max(1, Math.min(1000000, currentOnlineUsers));
 
       const elem = document.getElementById('onlineUsersCount');
@@ -1800,7 +1975,6 @@
       }
     }
 
-    // Tick online users every 1 second
     setInterval(updateOnlineUsersTicker, 1000);
 
     /* ==============================================================
